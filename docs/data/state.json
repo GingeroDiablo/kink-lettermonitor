@@ -1,59 +1,375 @@
 {
   "version": 2,
-  "last_checked": "2026-10-19T22:21:23.902742+02:00",
+  "last_checked": "2026-10-19T22:33:02.783196+02:00",
   "last_recording": null,
   "last_error": null,
   "now_playing": {
-    "artist": "The Beatles",
-    "title": "Revolution",
-    "started_at": "2026-10-19T22:20:00+02:00"
+    "artist": "Blur",
+    "title": "Charmless Man",
+    "started_at": "2026-10-19T22:27:00+02:00"
   },
   "status": "KINK gedraaid gecontroleerd; wacht op Metallica",
   "tracks": [
     {
       "rank": 1232,
-      "title": "Wherever I May Roam"
+      "title": "Wherever I May Roam",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-20T18:48+02:00",
+        "window_start": "2026-10-20T13:35+02:00",
+        "window_end": "2026-10-21T13:01+02:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 937,
-      "title": "Turn The Page"
+      "title": "Turn The Page",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-23T08:11+02:00",
+        "window_start": "2026-10-22T08:04+02:00",
+        "window_end": "2026-10-26T08:18+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 862,
-      "title": "Until it Sleeps"
+      "title": "Until it Sleeps",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-23T13:48+02:00",
+        "window_start": "2026-10-22T12:11+02:00",
+        "window_end": "2026-10-26T15:25+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 811,
-      "title": "The Memory Remains"
+      "title": "The Memory Remains",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-23T17:36+02:00",
+        "window_start": "2026-10-22T14:57+02:00",
+        "window_end": "2026-10-27T09:14+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 746,
-      "title": "Whiskey in the Jar"
+      "title": "Whiskey in the Jar",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-26T11:24+01:00",
+        "window_start": "2026-10-23T08:24+02:00",
+        "window_end": "2026-10-27T14:24+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 700,
-      "title": "The Unforgiven"
+      "title": "The Unforgiven",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-26T14:48+01:00",
+        "window_start": "2026-10-23T11:48+02:00",
+        "window_end": "2026-10-27T17:48+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 396,
-      "title": "Sad But True"
+      "title": "Sad But True",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-28T14:54+01:00",
+        "window_start": "2026-10-27T11:54+01:00",
+        "window_end": "2026-10-29T17:54+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 280,
-      "title": "Fade To Black"
+      "title": "Fade To Black",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-29T12:34+01:00",
+        "window_start": "2026-10-28T09:34+01:00",
+        "window_end": "2026-10-30T15:34+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 194,
-      "title": "Nothing Else Matters"
+      "title": "Nothing Else Matters",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-30T08:04+01:00",
+        "window_start": "2026-10-28T16:04+01:00",
+        "window_end": "2026-10-30T18:59+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 79,
-      "title": "Enter Sandman"
+      "title": "Enter Sandman",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-30T16:45+01:00",
+        "window_start": "2026-10-29T13:45+01:00",
+        "window_end": "2026-10-30T18:59+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 34,
-      "title": "One"
+      "title": "One",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-30T18:59+01:00",
+        "window_start": "2026-10-29T15:59+01:00",
+        "window_end": "2026-10-30T18:59+01:00",
+        "confidence": "ruwe indicatie (einde van de lijst)"
+      }
     }
   ],
-  "events": []
+  "events": [],
+  "forecast_anchors": [
+    {
+      "started_at": "2026-10-19T15:07:00+02:00",
+      "rank": 1421,
+      "minute": 427.0
+    },
+    {
+      "started_at": "2026-10-19T15:10:00+02:00",
+      "rank": 1420,
+      "minute": 430.0
+    },
+    {
+      "started_at": "2026-10-19T15:14:00+02:00",
+      "rank": 1419,
+      "minute": 434.0
+    },
+    {
+      "started_at": "2026-10-19T15:16:00+02:00",
+      "rank": 1418,
+      "minute": 436.0
+    },
+    {
+      "started_at": "2026-10-19T15:21:00+02:00",
+      "rank": 1417,
+      "minute": 441.0
+    },
+    {
+      "started_at": "2026-10-19T15:24:00+02:00",
+      "rank": 1416,
+      "minute": 444.0
+    },
+    {
+      "started_at": "2026-10-19T15:27:00+02:00",
+      "rank": 1415,
+      "minute": 447.0
+    },
+    {
+      "started_at": "2026-10-19T15:33:00+02:00",
+      "rank": 1414,
+      "minute": 453.0
+    },
+    {
+      "started_at": "2026-10-19T15:37:00+02:00",
+      "rank": 1413,
+      "minute": 457.0
+    },
+    {
+      "started_at": "2026-10-19T15:41:00+02:00",
+      "rank": 1412,
+      "minute": 461.0
+    },
+    {
+      "started_at": "2026-10-19T15:45:00+02:00",
+      "rank": 1411,
+      "minute": 465.0
+    },
+    {
+      "started_at": "2026-10-19T15:51:00+02:00",
+      "rank": 1409,
+      "minute": 471.0
+    },
+    {
+      "started_at": "2026-10-19T15:55:00+02:00",
+      "rank": 1408,
+      "minute": 475.0
+    },
+    {
+      "started_at": "2026-10-19T16:05:00+02:00",
+      "rank": 1407,
+      "minute": 485.0
+    },
+    {
+      "started_at": "2026-10-19T16:09:00+02:00",
+      "rank": 1406,
+      "minute": 489.0
+    },
+    {
+      "started_at": "2026-10-19T16:16:00+02:00",
+      "rank": 1404,
+      "minute": 496.0
+    },
+    {
+      "started_at": "2026-10-19T16:23:00+02:00",
+      "rank": 1403,
+      "minute": 503.0
+    },
+    {
+      "started_at": "2026-10-19T16:33:00+02:00",
+      "rank": 1402,
+      "minute": 513.0
+    },
+    {
+      "started_at": "2026-10-19T16:37:00+02:00",
+      "rank": 1401,
+      "minute": 517.0
+    },
+    {
+      "started_at": "2026-10-19T16:42:00+02:00",
+      "rank": 1400,
+      "minute": 522.0
+    },
+    {
+      "started_at": "2026-10-19T16:46:00+02:00",
+      "rank": 1399,
+      "minute": 526.0
+    },
+    {
+      "started_at": "2026-10-19T16:50:00+02:00",
+      "rank": 1398,
+      "minute": 530.0
+    },
+    {
+      "started_at": "2026-10-19T16:54:00+02:00",
+      "rank": 1397,
+      "minute": 534.0
+    },
+    {
+      "started_at": "2026-10-19T17:04:00+02:00",
+      "rank": 1396,
+      "minute": 544.0
+    },
+    {
+      "started_at": "2026-10-19T17:07:00+02:00",
+      "rank": 1395,
+      "minute": 547.0
+    },
+    {
+      "started_at": "2026-10-19T17:12:00+02:00",
+      "rank": 1394,
+      "minute": 552.0
+    },
+    {
+      "started_at": "2026-10-19T17:14:00+02:00",
+      "rank": 1393,
+      "minute": 554.0
+    },
+    {
+      "started_at": "2026-10-19T17:19:00+02:00",
+      "rank": 1392,
+      "minute": 559.0
+    },
+    {
+      "started_at": "2026-10-19T17:22:00+02:00",
+      "rank": 1391,
+      "minute": 562.0
+    },
+    {
+      "started_at": "2026-10-19T17:26:00+02:00",
+      "rank": 1390,
+      "minute": 566.0
+    },
+    {
+      "started_at": "2026-10-19T17:36:00+02:00",
+      "rank": 1389,
+      "minute": 576.0
+    },
+    {
+      "started_at": "2026-10-19T17:38:00+02:00",
+      "rank": 1388,
+      "minute": 578.0
+    },
+    {
+      "started_at": "2026-10-19T17:42:00+02:00",
+      "rank": 1387,
+      "minute": 582.0
+    },
+    {
+      "started_at": "2026-10-19T17:45:00+02:00",
+      "rank": 1386,
+      "minute": 585.0
+    },
+    {
+      "started_at": "2026-10-19T17:54:00+02:00",
+      "rank": 1384,
+      "minute": 594.0
+    },
+    {
+      "started_at": "2026-10-19T18:04:00+02:00",
+      "rank": 1383,
+      "minute": 604.0
+    },
+    {
+      "started_at": "2026-10-19T18:07:00+02:00",
+      "rank": 1382,
+      "minute": 607.0
+    },
+    {
+      "started_at": "2026-10-19T18:19:00+02:00",
+      "rank": 1380,
+      "minute": 619.0
+    },
+    {
+      "started_at": "2026-10-19T18:24:00+02:00",
+      "rank": 1379,
+      "minute": 624.0
+    },
+    {
+      "started_at": "2026-10-19T18:28:00+02:00",
+      "rank": 1378,
+      "minute": 628.0
+    },
+    {
+      "started_at": "2026-10-19T18:35:00+02:00",
+      "rank": 1377,
+      "minute": 635.0
+    },
+    {
+      "started_at": "2026-10-19T18:38:00+02:00",
+      "rank": 1376,
+      "minute": 638.0
+    },
+    {
+      "started_at": "2026-10-19T18:42:00+02:00",
+      "rank": 1375,
+      "minute": 642.0
+    },
+    {
+      "started_at": "2026-10-19T18:46:00+02:00",
+      "rank": 1374,
+      "minute": 646.0
+    },
+    {
+      "started_at": "2026-10-19T18:50:00+02:00",
+      "rank": 1373,
+      "minute": 650.0
+    },
+    {
+      "started_at": "2026-10-19T18:54:00+02:00",
+      "rank": 1372,
+      "minute": 654.0
+    }
+  ],
+  "forecast_meta": {
+    "observations": 46,
+    "calibrated": true,
+    "pace_minutes_per_position": 4.7,
+    "last_observation": "2026-10-19T18:54:00+02:00",
+    "assumption": "Werkdagen 08:00-19:00, nachtelijke herhaling niet voorspeld"
+  }
 }
