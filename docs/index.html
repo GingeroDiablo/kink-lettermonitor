@@ -81,6 +81,7 @@ footer{margin-top:35px;text-align:center;font-size:12px;color:var(--muted)}
 <div class="statushead"><span>Monitorstatus</span><span class="dot"></span></div>
 <div class="statusline" id="status">Status ophalen…</div>
 <div class="micro" id="checked">Laatste opgeslagen radiocontrole: —</div>
+<div class="micro" id="delaynotice">GitHub Actions voert de controle uit; geplande runs kunnen vertragen.</div>
 <div class="micro" id="ghrun">GitHub Actions: status ophalen…</div>
 <a class="btn" href="https://github.com/GingeroDiablo/kink-lettermonitor/actions/workflows/kink-monitor.yml" target="_blank" rel="noopener">Bekijk live controles op GitHub ↗</a>
 <div class="micro" id="nowplaying">Laatst bekend: —</div>
@@ -117,7 +118,7 @@ footer{margin-top:35px;text-align:center;font-size:12px;color:var(--muted)}
 (function(){
 "use strict";
 var STORE="kink-metallica-letters-v1";
-var state={tracks:[],events:[]}, overrides={};
+var state={tracks:[],events:[]}, overrides={}, lastGithubRun=null;
 try{overrides=JSON.parse(localStorage.getItem(STORE)||"{}")}catch(e){overrides={}}
 function $(id){return document.getElementById(id)}
 function elt(tag,cls,text){var node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
@@ -135,12 +136,35 @@ function forecastText(p){
 function tracks(){return (state.tracks||[]).slice().sort(function(a,b){return b.rank-a.rank})}
 function evidence(rank){var e=(state.events||[]).filter(function(x){return x.rank===rank && !!x.suggested_letter});return e.length?e[e.length-1].suggested_letter:null}
 function code(){return tracks().map(function(t){return overrides[String(t.rank)]||"?"}).join("")}
+function renderStatus(){
+ var lag=elapsedMinutes(state.last_checked);
+ var runLag=lastGithubRun?elapsedMinutes(lastGithubRun.created_at):null;
+ var inProgress=lastGithubRun&&lastGithubRun.status!=="completed";
+ var late=runLag!==null&&runLag>=12;
+ $("checked").textContent="Laatst opgeslagen radioresultaat: "+dateText(state.last_checked)+
+   (lag===null?"":(" ("+lag+" min geleden)"));
+ if(inProgress){
+  $("status").textContent="GitHub voert momenteel een controle uit";
+  $("delaynotice").textContent="De radioresultaten worden gepubliceerd zodra de controle is afgerond.";
+ }else if(late){
+  $("status").textContent="GitHub-controle vertraagd";
+  $("delaynotice").textContent="De laatste GitHub-run begon "+runLag+
+   " minuten geleden. Geplande scans kunnen vertragen of uitvallen. Open 'Bekijk live controles' om handmatig te starten.";
+ }else if(lastGithubRun&&lastGithubRun.conclusion!=="success"){
+  $("status").textContent="Laatste GitHub-controle mislukt";
+  $("delaynotice").textContent="Bekijk de uitvoeringslogboeken via de knop hieronder.";
+ }else if(lag===null){
+  $("status").textContent="Nog geen opgeslagen radiocontrole";
+  $("delaynotice").textContent="De GitHub-monitor heeft nog geen resultaten gepubliceerd.";
+ }else{
+  $("status").textContent=state.status||"De monitor controleert KINK";
+  $("delaynotice").textContent="GitHub controleert volgens schema; deze laatste opgeslagen gegevens zijn "+lag+" minuten oud.";
+ }
+ $("nowplaying").textContent=state.now_playing?("Laatst bekend: "+state.now_playing.artist+" — "+state.now_playing.title):"Laatst bekend: —";
+}
 function update(){
 var list=tracks();
-var lag=elapsedMinutes(state.last_checked);
-$("status").textContent=lag===null?"Nog geen opgeslagen controle":lag>25?"Controle vertraagd ("+lag+" min geleden)":(state.status||"Monitor heeft gecontroleerd");
-$("checked").textContent="Laatste opgeslagen radiocontrole: "+dateText(state.last_checked)+(lag===null?"":(" ("+lag+" min geleden)"));
-$("nowplaying").textContent=state.now_playing?("Laatst bekend: "+state.now_playing.artist+" — "+state.now_playing.title):"Laatst bekend: —";
+renderStatus();
 $("error").hidden=!state.last_error;$("error").textContent=state.last_error||"";
 var count=state.forecast_meta&&Number(state.forecast_meta.observations)||0;
 $("forecastinfo").textContent="Geschatte uitzending overdag (ma–vr 08.00–19.00); "+
@@ -191,6 +215,7 @@ async function refreshRun(){
   var runs=(data.workflow_runs||[]).filter(function(r){return r.name==="KINK Metallica Lettermonitor"});
   if(!runs.length){$("ghrun").textContent="GitHub Actions: geen monitoruitvoering gevonden";return}
   var latest=runs[0], mins=elapsedMinutes(latest.created_at), when=dateText(latest.created_at);
+  lastGithubRun=latest;renderStatus();
   var phase=latest.status!=="completed"?"bezig / ingepland":latest.conclusion==="success"?"succesvol":"mislukt ("+(latest.conclusion||"onbekend")+")";
   var scheduleSeen=runs.some(function(r){return r.event==="schedule"});
   $("ghrun").textContent="Laatste GitHub-uitvoering: "+when+" · "+phase+
@@ -215,7 +240,10 @@ $("export").addEventListener("click",function(){download("kink-letters-backup.js
 $("csv").addEventListener("click",function(){var rows=[["Positie","Metallica nummer","Bevestigd","Automatisch voorstel","Verwacht","Vroegst","Laatst","Status voorspelling"]];tracks().forEach(function(t){var p=t.prediction||{};rows.push([t.rank>0?t.rank:"?",t.title,overrides[String(t.rank)]||"",evidence(t.rank)||"",p.estimated_at||"",p.window_start||"",p.window_end||"",p.status||""])});download("kink-letters.csv",rows.map(function(row){return row.map(function(x){return '"'+String(x).replace(/"/g,'""')+'"'}).join(";")}).join("\n"),"text/csv;charset=utf-8")});
 $("import").addEventListener("click",function(){$("input").click()});
 $("input").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;f.text().then(function(s){var obj=JSON.parse(s),values=obj.letters||obj;var next={};Object.keys(values).forEach(function(k){if(/^[-]?\d+$/.test(k)&&/^[A-Z]$/.test(values[k]))next[k]=values[k]});overrides=next;store();update();window.alert("Letters geïmporteerd")}).catch(function(){window.alert("Ongeldig JSON-bestand")});e.target.value=""});
-update();refresh();refreshRun();setInterval(refresh,120000);setInterval(refreshRun,180000);
+update();refresh();refreshRun();
+setInterval(refresh,60000);
+setInterval(refreshRun,120000);
+setInterval(renderStatus,30000);
 })();
 </script>
 </body></html>
