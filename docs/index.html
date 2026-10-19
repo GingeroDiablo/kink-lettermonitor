@@ -75,7 +75,9 @@ footer{margin-top:35px;text-align:center;font-size:12px;color:var(--muted)}
 <section class="card status-panel">
 <div class="statushead"><span>Monitorstatus</span><span class="dot"></span></div>
 <div class="statusline" id="status">Status ophalen…</div>
-<div class="micro" id="checked">Laatste controle: —</div>
+<div class="micro" id="checked">Laatste opgeslagen radiocontrole: —</div>
+<div class="micro" id="ghrun">GitHub Actions: status ophalen…</div>
+<a class="btn" href="https://github.com/GingeroDiablo/kink-lettermonitor/actions/workflows/kink-monitor.yml" target="_blank" rel="noopener">Bekijk live controles op GitHub ↗</a>
 <div class="micro" id="nowplaying">Laatst bekend: —</div>
 <div class="error" id="error" hidden></div>
 <a class="btn" target="_blank" rel="noopener" href="https://kink.nl/luister/kink">Luister zelf naar KINK ↗</a>
@@ -98,6 +100,7 @@ footer{margin-top:35px;text-align:center;font-size:12px;color:var(--muted)}
 </div>
 <div>
 <section class="card section" style="margin-bottom:20px"><div class="sectionhead"><h2>Opnames &amp; aanwijzingen</h2><small id="eventsCount">0 waarnemingen</small></div><div id="events" class="empty">Er zijn nog geen Metallica-nummers geregistreerd.</div></section>
+<div class="footnote" style="margin-bottom:14px"><strong>Pushmeldingen bij Metallica en nieuwe lettervoorstellen:</strong> installeer de gratis GitHub-app, log in met GingeroDiablo en schakel onder Profiel → Instellingen → Configure Notifications de pushmeldingen voor <strong>Direct mentions</strong> in. Je wordt in een GitHub-issue genoemd zodra een nieuwe relevante waarneming wordt opgeslagen. <a class="link" target="_blank" rel="noopener" href="https://github.com/GingeroDiablo/kink-lettermonitor/issues">Open meldingen ↗</a></div>
 <div class="footnote">Let op: GitHub Actions wordt niet precies op tijd gestart. Bij gemiste aankondigingen kan KINKs herhaling tussen 19.00 en 08.00 uur helpen. Deze monitor is geen garantie op een volledig codewoord.</div>
 </div>
 </div>
@@ -113,13 +116,15 @@ function $(id){return document.getElementById(id)}
 function elt(tag,cls,text){var node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
 function dateText(d){if(!d)return"—";var x=new Date(d);return isNaN(x)?"—":x.toLocaleString("nl-NL",{timeZone:"Europe/Amsterdam",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}
 function store(){localStorage.setItem(STORE,JSON.stringify(overrides))}
+function elapsedMinutes(value){var stamp=Date.parse(value||"");return Number.isFinite(stamp)?Math.max(0,Math.round((Date.now()-stamp)/60000)):null}
 function tracks(){return (state.tracks||[]).slice().sort(function(a,b){return b.rank-a.rank})}
 function evidence(rank){var e=(state.events||[]).filter(function(x){return x.rank===rank && !!x.suggested_letter});return e.length?e[e.length-1].suggested_letter:null}
 function code(){return tracks().map(function(t){return overrides[String(t.rank)]||"?"}).join("")}
 function update(){
 var list=tracks();
-$("status").textContent=state.status||"Nog niet gestart";
-$("checked").textContent="Laatste controle: "+dateText(state.last_checked);
+var lag=elapsedMinutes(state.last_checked);
+$("status").textContent=lag===null?"Nog geen opgeslagen controle":lag>25?"Controle vertraagd ("+lag+" min geleden)":(state.status||"Monitor heeft gecontroleerd");
+$("checked").textContent="Laatste opgeslagen radiocontrole: "+dateText(state.last_checked)+(lag===null?"":(" ("+lag+" min geleden)"));
 $("nowplaying").textContent=state.now_playing?("Laatst bekend: "+state.now_playing.artist+" — "+state.now_playing.title):"Laatst bekend: —";
 $("error").hidden=!state.last_error;$("error").textContent=state.last_error||"";
 $("total").textContent=list.length;
@@ -156,6 +161,24 @@ events.forEach(function(e){
  $("events").append(row);
 });
 }
+async function refreshRun(){
+ try {
+  var api="https://api.github.com/repos/GingeroDiablo/kink-lettermonitor/actions/runs?per_page=12";
+  var response=await fetch(api,{cache:"no-store"});
+  if(!response.ok)throw new Error("GitHub HTTP "+response.status);
+  var data=await response.json();
+  var runs=(data.workflow_runs||[]).filter(function(r){return r.name==="KINK Metallica Lettermonitor"});
+  if(!runs.length){$("ghrun").textContent="GitHub Actions: geen monitoruitvoering gevonden";return}
+  var latest=runs[0], mins=elapsedMinutes(latest.created_at), when=dateText(latest.created_at);
+  var phase=latest.status!=="completed"?"bezig / ingepland":latest.conclusion==="success"?"succesvol":"mislukt ("+(latest.conclusion||"onbekend")+")";
+  var scheduleSeen=runs.some(function(r){return r.event==="schedule"});
+  $("ghrun").textContent="Laatste GitHub-uitvoering: "+when+" · "+phase+
+    (mins===null?"":" · "+mins+" min geleden")+
+    (scheduleSeen?"":" · nog geen geplande uitvoering zichtbaar");
+ } catch(e) {
+  $("ghrun").textContent="GitHub-uitvoeringen momenteel niet bereikbaar; gebruik de knop hierboven.";
+ }
+}
 async function refresh(){
  try{
   var response=await fetch("./data/state.json?v="+Date.now(),{cache:"no-store"});
@@ -171,7 +194,7 @@ $("export").addEventListener("click",function(){download("kink-letters-backup.js
 $("csv").addEventListener("click",function(){var rows=[["Positie","Metallica nummer","Bevestigd","Automatisch voorstel"]];tracks().forEach(function(t){rows.push([t.rank>0?t.rank:"?",t.title,overrides[String(t.rank)]||"",evidence(t.rank)||""])});download("kink-letters.csv",rows.map(function(row){return row.map(function(x){return '"'+String(x).replace(/"/g,'""')+'"'}).join(";")}).join("\n"),"text/csv;charset=utf-8")});
 $("import").addEventListener("click",function(){$("input").click()});
 $("input").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;f.text().then(function(s){var obj=JSON.parse(s),values=obj.letters||obj;var next={};Object.keys(values).forEach(function(k){if(/^[-]?\d+$/.test(k)&&/^[A-Z]$/.test(values[k]))next[k]=values[k]});overrides=next;store();update();window.alert("Letters geïmporteerd")}).catch(function(){window.alert("Ongeldig JSON-bestand")});e.target.value=""});
-update();refresh();setInterval(refresh,120000);
+update();refresh();refreshRun();setInterval(refresh,120000);setInterval(refreshRun,180000);
 })();
 </script>
 </body></html>
