@@ -82,6 +82,7 @@ footer{margin-top:35px;text-align:center;font-size:12px;color:var(--muted)}
 <div class="statusline" id="status">Status ophalen…</div>
 <div class="micro" id="checked">Laatste opgeslagen radiocontrole: —</div>
 <div class="micro" id="delaynotice">GitHub Actions voert de controle uit; geplande runs kunnen vertragen.</div>
+<button class="btn" id="manual-refresh" type="button">↻ Ververs laatste status</button>
 <div class="micro" id="ghrun">GitHub Actions: status ophalen…</div>
 <a class="btn" href="https://github.com/GingeroDiablo/kink-lettermonitor/actions/workflows/kink-monitor.yml" target="_blank" rel="noopener">Bekijk live controles op GitHub ↗</a>
 <div class="micro" id="nowplaying">Laatst bekend: —</div>
@@ -240,6 +241,12 @@ $("export").addEventListener("click",function(){download("kink-letters-backup.js
 $("csv").addEventListener("click",function(){var rows=[["Positie","Metallica nummer","Bevestigd","Automatisch voorstel","Verwacht","Vroegst","Laatst","Status voorspelling"]];tracks().forEach(function(t){var p=t.prediction||{};rows.push([t.rank>0?t.rank:"?",t.title,overrides[String(t.rank)]||"",evidence(t.rank)||"",p.estimated_at||"",p.window_start||"",p.window_end||"",p.status||""])});download("kink-letters.csv",rows.map(function(row){return row.map(function(x){return '"'+String(x).replace(/"/g,'""')+'"'}).join(";")}).join("\n"),"text/csv;charset=utf-8")});
 $("import").addEventListener("click",function(){$("input").click()});
 $("input").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;f.text().then(function(s){var obj=JSON.parse(s),values=obj.letters||obj;var next={};Object.keys(values).forEach(function(k){if(/^[-]?\d+$/.test(k)&&/^[A-Z]$/.test(values[k]))next[k]=values[k]});overrides=next;store();update();window.alert("Letters geïmporteerd")}).catch(function(){window.alert("Ongeldig JSON-bestand")});e.target.value=""});
+$("manual-refresh").addEventListener("click",async function(){
+ var btn=$("manual-refresh");
+ btn.disabled=true;btn.textContent="Status ophalen…";
+ try {await Promise.all([refresh(),refreshRun()]);}
+ finally {btn.disabled=false;btn.textContent="↻ Ververs laatste status";}
+});
 update();refresh();refreshRun();
 setInterval(refresh,60000);
 setInterval(refreshRun,120000);
