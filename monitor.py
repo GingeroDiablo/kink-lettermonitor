@@ -14,6 +14,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 from bs4 import BeautifulSoup
+from forecast import update_forecasts
 
 ROOT = Path(__file__).resolve().parent
 STATE_PATH = ROOT / "docs/data/state.json"
@@ -307,6 +308,7 @@ def main():
         played = recent()
         update_tracks(state, rankmap, played)
         update_events(state, played)
+        update_forecasts(state, rankmap, played)
         last = played[-1]
         state["now_playing"] = {k: last[k] for k in ("artist", "title", "started_at")}
         target = pick_target(state, rankmap, played)
@@ -321,7 +323,7 @@ def main():
         state["last_error"] = str(exc)[:300]
         state["status"] = "Controlefout"
     state["last_checked"] = now().isoformat()
-    meaningful = any(prior.get(k) != state.get(k) for k in ("tracks", "events", "last_error", "last_recording"))
+    meaningful = any(prior.get(k) != state.get(k) for k in ("tracks", "events", "forecast_anchors", "forecast_meta", "last_error", "last_recording"))
     if not meaningful and prior.get("last_checked"):
         try:
             meaningful = (datetime.fromisoformat(state["last_checked"]) -
