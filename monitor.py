@@ -57,6 +57,7 @@ def rankings():
         if 1 <= rank <= 1500 and match:
             result[rank] = {"artist": match.group(1).strip(), "title": match.group(2).strip()}
     if len(result) < 1100:
+        log.warning("Hitlijst debug: %s tokens, eerste 35 = %r", len(values), values[:35])
         raise ValueError("KINK hitlijst niet volledig leesbaar (" + str(len(result)) + " posities)")
     return result
 
