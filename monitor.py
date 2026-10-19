@@ -240,13 +240,13 @@ def record(state, rank):
         process = subprocess.Popen(
             ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
              "-reconnect", "1", "-reconnect_streamed", "1", "-reconnect_delay_max", "5",
-             "-i", STREAM_URL, "-t", "1650", "-vn", "-ac", "1", "-ar", "16000",
+             "-i", STREAM_URL, "-t", "780", "-vn", "-ac", "1", "-ar", "16000",
              "-c:a", "pcm_s16le", str(audio)],
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
         )
         start = end = None
         try:
-            deadline = time.monotonic() + 1600
+            deadline = time.monotonic() + 750
             while time.monotonic() < deadline and process.poll() is None:
                 time.sleep(30)
                 try:
@@ -325,7 +325,7 @@ def main():
     if not meaningful and prior.get("last_checked"):
         try:
             meaningful = (datetime.fromisoformat(state["last_checked"]) -
-                          datetime.fromisoformat(prior["last_checked"])).total_seconds() > 40 * 60
+                          datetime.fromisoformat(prior["last_checked"])).total_seconds() >= 12 * 60
         except (ValueError, TypeError):
             meaningful = True
     if meaningful or not prior.get("last_checked"):
