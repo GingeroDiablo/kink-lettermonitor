@@ -13,8 +13,10 @@ on:
       - 'forecast.py'
   workflow_dispatch:
   schedule:
-    # GitHub starttijden zijn best-effort en kunnen worden overgeslagen.
-    - cron: '2,7,12,17,22,27,32,37,42,47,52,57 * 19-31 10 *'
+    # Twee verschoven tijdreeksen (elk 10 min, samen iedere 5 min).
+    # GitHub kan deze geplande controles nog steeds vertragen of overslaan.
+    - cron: '3-59/10 * 19-31 10 *'
+    - cron: '8-59/10 * 19-31 10 *'
 
 permissions:
   contents: write
