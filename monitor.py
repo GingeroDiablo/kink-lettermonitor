@@ -56,6 +56,8 @@ def rankings():
         match = re.match(r"^(.+?)\s+[-–—]\s+(.+)$", values[i + 1])
         if 1 <= rank <= 1500 and match:
             result[rank] = {"artist": match.group(1).strip(), "title": match.group(2).strip()}
+        elif 1 <= rank <= 1500 and i + 3 < len(values) and values[i + 2] in ("-", "–", "—"):
+            result[rank] = {"artist": values[i + 1].strip(), "title": values[i + 3].strip()}
     if len(result) < 1100:
         log.warning("Hitlijst debug: %s tokens, eerste 35 = %r", len(values), values[:35])
         raise ValueError("KINK hitlijst niet volledig leesbaar (" + str(len(result)) + " posities)")
