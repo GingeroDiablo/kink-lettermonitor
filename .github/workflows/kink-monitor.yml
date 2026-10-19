@@ -7,6 +7,7 @@ on:
       - 'docs/**'
       - 'monitor.py'
       - 'requirements.txt'
+      - 'tests/**'
       - '.github/workflows/kink-monitor.yml'
   workflow_dispatch:
   schedule:
@@ -37,6 +38,8 @@ jobs:
           python-version: '3.12'
       - name: Install requirements
         run: python -m pip install -q -r requirements.txt
+      - name: Run unit tests
+        run: python -m unittest discover -s tests -q
       - name: Check KINK and record nearby Metallica
         run: python monitor.py
         env:
