@@ -323,18 +323,11 @@ def main():
         state["last_error"] = str(exc)[:300]
         state["status"] = "Controlefout"
     state["last_checked"] = now().isoformat()
-    meaningful = any(prior.get(k) != state.get(k) for k in ("tracks", "events", "forecast_anchors", "forecast_meta", "last_error", "last_recording"))
-    if not meaningful and prior.get("last_checked"):
-        try:
-            meaningful = (datetime.fromisoformat(state["last_checked"]) -
-                          datetime.fromisoformat(prior["last_checked"])).total_seconds() >= 12 * 60
-        except (ValueError, TypeError):
-            meaningful = True
-    if meaningful or not prior.get("last_checked"):
-        save(state)
-        log.info("Status en resultaten opgeslagen")
-    else:
-        log.info("Geen wijzigingen")
+    # Persist an explicit heartbeat on every completed scan. A static GitHub
+    # Pages site otherwise looks frozen when nothing interesting is playing.
+    # GitHub's scheduler can still delay or skip an entire scan.
+    save(state)
+    log.info("Controle afgerond en laatste scantijd opgeslagen")
 
 if __name__ == "__main__":
     main()
