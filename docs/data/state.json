@@ -1,10 +1,14 @@
 {
   "version": 2,
-  "last_checked": "2026-10-19T21:57:17.757875+02:00",
+  "last_checked": "2026-10-19T21:59:52.254303+02:00",
   "last_recording": null,
-  "last_error": "KINK hitlijst niet volledig leesbaar (0 posities)",
-  "now_playing": null,
-  "status": "Controlefout",
+  "last_error": null,
+  "now_playing": {
+    "artist": "Bruce Springsteen",
+    "title": "Born in the U.S.A.",
+    "started_at": "2026-10-19T21:56:00+02:00"
+  },
+  "status": "KINK gedraaid gecontroleerd; wacht op Metallica",
   "tracks": [
     {
       "rank": 1232,
