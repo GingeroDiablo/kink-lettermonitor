@@ -1,0 +1,55 @@
+{
+  "version": 2,
+  "last_checked": null,
+  "last_recording": null,
+  "last_error": null,
+  "now_playing": null,
+  "status": "Nog niet gestart",
+  "tracks": [
+    {
+      "rank": 1232,
+      "title": "Wherever I May Roam"
+    },
+    {
+      "rank": 937,
+      "title": "Turn The Page"
+    },
+    {
+      "rank": 862,
+      "title": "Until it Sleeps"
+    },
+    {
+      "rank": 811,
+      "title": "The Memory Remains"
+    },
+    {
+      "rank": 746,
+      "title": "Whiskey in the Jar"
+    },
+    {
+      "rank": 700,
+      "title": "The Unforgiven"
+    },
+    {
+      "rank": 396,
+      "title": "Sad But True"
+    },
+    {
+      "rank": 280,
+      "title": "Fade To Black"
+    },
+    {
+      "rank": 194,
+      "title": "Nothing Else Matters"
+    },
+    {
+      "rank": 79,
+      "title": "Enter Sandman"
+    },
+    {
+      "rank": 34,
+      "title": "One"
+    }
+  ],
+  "events": []
+}
