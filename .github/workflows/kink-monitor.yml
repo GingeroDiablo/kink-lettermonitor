@@ -9,6 +9,7 @@ on:
       - 'requirements.txt'
       - 'tests/**'
       - '.github/workflows/kink-monitor.yml'
+      - 'notify.py'
   workflow_dispatch:
   schedule:
     # GitHub starttijden zijn best-effort en kunnen worden overgeslagen.
@@ -16,6 +17,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: kink-lettermonitor-data
@@ -24,7 +26,7 @@ concurrency:
 jobs:
   watch:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 20
     outputs:
       changed: ${{ steps.persist.outputs.changed }}
     steps:
@@ -44,6 +46,12 @@ jobs:
         run: python monitor.py
         env:
           STREAM_URL: https://playerservices.streamtheworld.com/api/livestream-redirect/KINKAAC.aac
+      - name: Send GitHub notifications for new Metallica plays and letters
+        run: python notify.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          NOTIFY_USER: GingeroDiablo
       - name: Save observed letters and transcripts
         id: persist
         shell: bash
