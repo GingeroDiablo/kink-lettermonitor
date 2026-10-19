@@ -1,0 +1,99 @@
+# KINK 1500 Metallica Lettermonitor — volledig gratis op GitHub
+
+**Voor de KINK-actie 19 t/m 30 oktober 2026.** Deze versie vereist **geen eigen server, NAS, Docker, AI-API-sleutel of creditcard**. De code is een hobbyproject, onafhankelijk van KINK of Metallica.
+
+> Belangrijk: dit is **best-effort**, niet een continue of gegarandeerde recorder. GitHub Actions kan geplande runs vertragen of overslaan. Het radiostation, de afspeellijst en de stream kunnen bovendien veranderen. We geven alleen **onbevestigde** lettervoorstellen; verifieer zelf je letters.
+
+## Hoe werkt het?
+
+```text
+KINK lijst (rang / titel) + KINK gedraaid (tijdstippen)
+            | (GitHub Actions: iedere 5 minuten gepland)
+            v
+       Metallica in de buurt?
+            |
+      Nee: stoppen (weinig rekenwerk)
+            |
+      Ja: tijdelijke opname op GitHub-runner
+            |
+       ffmpeg + gratis offline Whisper (faster-whisper)
+            |
+       voorstel + transcript => docs/data/state.json
+            |
+       GitHub Actions deployt /docs (ook na bot-commit)
+            |
+       GitHub Pages => dashboard op telefoon/PC
+```
+
+De **live audio wordt niet in de repository opgeslagen** en wordt na verwerking van de runner verwijderd. Alleen de (kort gehouden) transcriptie en onbevestigde suggesties gaan in een JSON-bestand.
+
+## Installatie met GitHub Desktop (makkelijkste)
+
+1. Download `KINK_GitHub_Gratis.zip` uit het ChatGPT-antwoord. Pak het ZIP-bestand uit, zodat je de map `KINK-GitHub-Gratis` ziet.
+2. Installeer [GitHub Desktop](https://desktop.github.com/) en log in op je gratis GitHub-account.
+3. Kies **File → Add Local Repository → Choose...**, wijs de uitgepakte map aan en kies **Create a Repository** als Desktop daarom vraagt.
+4. Klik **Publish repository**, kies een naam (bijv. `kink-lettermonitor`), zorg dat **Keep this code private UIT staat** (publieke repository), en publiceer.
+5. Open de repository op github.com. Ga naar **Settings → Pages → Build and deployment** en kies bij **Source** de optie **GitHub Actions**. Dat is nodig voor het publiceren na automatische updates.
+6. Open **Actions → KINK Metallica lettermonitor → Run workflow** om de eerste controle én de dashboardpublicatie te starten. (Een push op `main` kan dit ook al automatisch starten.)
+7. Bekijk de workflowstatus en open bij **Settings → Pages** de gepubliceerde website. De URL is doorgaans `https://JOUWNAAM.github.io/kink-lettermonitor/`.
+8. Mocht de workflow op de publicatiestap een toestemmingsfout geven, controleer dan **Settings → Actions → General → Workflow permissions** en of Pages is geactiveerd. De workflow zelf vraagt `contents: write` en `pages: write` aan.
+
+De monitor controleert daarna automatisch met een **gepland interval van vijf minuten**. Bij gewijzigde resultaten voert de workflow ook expliciet een Pages-deploy uit; zonder die stap zouden bot-commits niet zichtbaar worden op de website. Starttijden zijn niet gegarandeerd. De workflow doet buiten de wedstrijdperiode in 2026 geen werk; verwijder de workflow na afloop om toekomstige cron-aanroepen volledig te stoppen.
+
+### Alternatief met Git
+
+Maak eerst op GitHub een nieuwe **openbare, lege** repository zonder README aan. Voer in de uitgepakte projectmap uit (pas gebruikersnaam/repository aan):
+
+```bash
+git init -b main
+git add .
+git commit -m "KINK monitor GitHub edition"
+git remote add origin https://github.com/JOUWNAAM/kink-lettermonitor.git
+git push -u origin main
+```
+
+Daarna stappen 5–8 hierboven.
+
+## Dashboard en opslag
+
+- De **officiële** Metallica-trackposities worden automatisch uit de KINK 1500 herlezen; de 11 nu publiek bekende posities zitten als startlijst in het project. Als KINK de top 10 nog niet heeft bekendgemaakt, kan een Metallica-nummer tijdelijk met positie **?** verschijnen. Zodra de ranking officieel bekend is, wordt de positie hersteld.
+- Bij uitzendmeldingen toont het dashboard datum, transcript en eventueel **lettervoorstel**.
+- Klik een nummer aan om zelf **één letter A–Z** te bevestigen. Die bevestiging blijft **uitsluitend in de lokale opslag van die browser** (privacy, geen GitHub-login/API-sleutel in de publieke browser).
+- Gebruik **Back-up JSON / Importeer JSON** voor overdracht tussen telefoon/computer of bij browserreset.
+- **CSV-export** voor een eigen overzicht; je codewoord kun je zelf vormen met de verzamelde letters.
+- De app publiceert geen audioclips; automatisch herkennen van een individuele gesproken letter kan verkeerd gaan.
+
+## Waarom een openbare repository?
+
+Volgens de officiële GitHub-documentatie zijn **standaard GitHub-hosted Actions-runners in openbare repositories gratis**; op GitHub Free is GitHub Pages ook beschikbaar voor openbare repositories. Private repositories hebben andere limieten, waardoor 5-minutencontroles niet binnen het gewone gratis maandbudget passen.
+
+## Technische grenzen
+
+- De geplande vijf minuten zijn **geen belofte**: GitHub documenteert vertragingen en mogelijk overgeslagen runs.
+- De app voorspelt een naderend Metallica-nummer door **track en positie** in de gepubliceerde afspeellijst te vergelijken met de volledige officiële hitlijst. De site kan vertraagd of onbereikbaar zijn.
+- Audio wordt pas opgenomen **als een hitlijstpositie in de buurt komt**, niet continu. Een aankondiging vóór het opnemen wordt gemist; de KINK-herhaling kan helpen.
+- Nachtelijke herhaling (volgens KINK tussen 19:00 en 08:00) kan een tweede detectie opleveren; een nummer telt maar één keer voor de code.
+- De **spraakherkenning is gratis**, maar het model `base` wordt pas bij de eerste echte opname gedownload. Downloadtijd, geluidskwaliteit en muziek onder de stem beïnvloeden de transcriptie.
+- GitHub Pages kan na een JSON-commit enkele minuten nodig hebben om bijgewerkt te worden. De app ververst de status in de browser om de twee minuten.
+- Actie eindigt op 30 oktober; het script accepteert de nachtherhaling tot 31 oktober vóór 08:00. De officiële winnaar wordt 2 november bekendgemaakt.
+- Alle JSON-resultaten, inclusief gevonden letters en transcripten, zijn publiek op GitHub. Zet er **geen persoonlijke gegevens, geheimen of API-sleutels** in.
+- **De officiële wedstrijdinzending moet je zelf doen op KINK.nl.**
+
+## Repareren / testen
+
+Open **Actions → KINK Metallica lettermonitor → meest recente run** voor foutmeldingen. Bij lege of verkeerd gelezen KINK-pagina's verschijnt de fout ook in het dashboard wanneer die opgeslagen kan worden. De radiostream staat in `.github/workflows/kink-monitor.yml` en kan veranderd worden als KINK een ander kanaal gebruikt. Gebruik alleen het *hoofdkanaal*, niet Distortion of Classics.
+
+Tests lokaal: `python -m pip install -r requirements.txt pytest` en `python -m pytest -q`.
+
+## Bestanden
+
+| Pad | Doel |
+| --- | --- |
+| `.github/workflows/kink-monitor.yml` | geplande GitHub Actions-taak + opslag + expliciete Pages-publicatie |
+| `monitor.py` | officiële KINK-pagina's lezen, kort opnemen, spraakherkenning |
+| `docs/index.html` | GitHub Pages dashboard |
+| `docs/assets/app.js` en `style.css` | knoppen, letters, lokale back-up, styling |
+| `docs/data/state.json` | publiek leesbare status + voorgestelde letters |
+| `tests/test_monitor.py` | parser, timing, deduplicatie en lettertests |
+
+Bronnen: [KINK-actie](https://kink.nl/nieuws/kink-stuurt-je-naar-metallica-in-las-vegas-tijdens-de-kink-1500), [officiële KINK 1500](https://kink.nl/hitlists/kink-1500), [KINK gedraaid](https://kink.nl/gedraaid), [GitHub Actions planning](https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#onschedule), [gratis GitHub Actions](https://docs.github.com/en/actions/concepts/billing-and-usage), [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
