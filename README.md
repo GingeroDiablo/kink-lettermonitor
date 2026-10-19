@@ -4,6 +4,21 @@
 
 > Belangrijk: dit is **best-effort**, niet een continue of gegarandeerde recorder. GitHub Actions kan geplande runs vertragen of overslaan. Het radiostation, de afspeellijst en de stream kunnen bovendien veranderen. We geven alleen **onbevestigde** lettervoorstellen; verifieer zelf je letters.
 
+
+## Actuele status en gratis pushmeldingen
+
+**Dashboard:** https://gingerodiablo.github.io/kink-lettermonitor/
+
+- Het dashboard toont zowel de laatst opgeslagen radiocontrole (uit \`docs/data/state.json\`) als de nieuwste workflow-uitvoering rechtstreeks via de openbare GitHub Actions API. Daardoor lijkt de tijd niet langer onbeperkt vast te lopen wanneer er geen nieuwe letter is.
+- Als de opgeslagen controle ouder is dan 25 minuten, verschijnt de melding "Controle vertraagd". GitHub kan een geplande workflow vertragen of overslaan; dit kan niet worden gegarandeerd.
+- Een korte opname loopt maximaal ongeveer 12,5 minuten. Het GitHub Actions monitorproces heeft een timeout van 20 minuten, zodat de volgende scan niet voortdurend blijft wachten.
+- Zodra een Metallica-nummer is waargenomen, maakt \`notify.py\` maximaal één GitHub-issue per uitzending met een vermelding van \`@GingeroDiablo\`. Bij een later automatisch lettervoorstel volgt maximaal één nieuw commentaar per veranderd voorstel. Herhaalde controles geven geen dubbele meldingen. Meldingen werken alleen als de GitHub-workflow daadwerkelijk draait.
+
+**Push aanzetten op Android:** installeer [GitHub Mobile](https://github.com/mobile), meld je aan met \`GingeroDiablo\`, ga naar Profiel → Settings → Configure Notifications en schakel **Direct mentions** in. Schakel daarnaast meldingen voor de GitHub-app in bij Android-instellingen. Optioneel kun je op de repository **Watch → Custom → Issues** inschakelen. Zet niet alle workflow-succesmeldingen aan als je geen melding bij iedere controle wilt.
+
+**Let op:** de GitHub-koppeling kan GitHub-issues aanmaken, maar kan niet de notificatie-instellingen of de app op je telefoon configureren. En een succesvolle scan zonder Metallica of letter veroorzaakt bewust geen pushmelding.
+
+
 ## Hoe werkt het?
 
 ```text
