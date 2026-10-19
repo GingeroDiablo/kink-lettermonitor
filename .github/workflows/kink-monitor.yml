@@ -10,6 +10,7 @@ on:
       - 'tests/**'
       - '.github/workflows/kink-monitor.yml'
       - 'notify.py'
+      - 'forecast.py'
   workflow_dispatch:
   schedule:
     # GitHub starttijden zijn best-effort en kunnen worden overgeslagen.
