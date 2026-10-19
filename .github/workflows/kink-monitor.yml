@@ -59,6 +59,7 @@ jobs:
           git push
           echo 'changed=true' >> "$GITHUB_OUTPUT"
 
+  # Publiceer uitsluitend het dashboard uit docs/ op de Pages-root.
   publish:
     needs: watch
     if: ${{ needs.watch.outputs.changed == 'true' || github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
