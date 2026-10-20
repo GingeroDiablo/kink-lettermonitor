@@ -6,3 +6,6 @@ __pycache__/
 *.mp3
 .env
 .DS_Store
+
+# Temporary radio clips are never committed or published to Pages.
+artifact_audio/
