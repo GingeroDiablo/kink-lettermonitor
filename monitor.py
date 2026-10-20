@@ -73,6 +73,14 @@ def plays_for(day):
             continue
         if len(artist) > 100 or len(title) > 150 or not artist or not title:
             continue
+        # KINK pages can contain schedule headings such as "06:00 - 09:00".
+        # They are not playable songs, even though they resemble a three-token row.
+        if artist.strip() in ("-", "–", "—") or title.strip() in ("-", "–", "—"):
+            continue
+        if re.fullmatch(r"(?:[01]\d|2[0-3]):[0-5]\d", artist):
+            continue
+        if re.fullmatch(r"(?:[01]\d|2[0-3]):[0-5]\d", title):
+            continue
         hour, minute = map(int, clock.split(":"))
         dt = datetime(day.year, day.month, day.day, hour, minute, tzinfo=TZ)
         if normalized(artist) in ("kink 1500", "kink", "gedraaid op kink"):
@@ -90,6 +98,8 @@ def recent():
             items = plays_for(t.date() - timedelta(days=1)) + items
         except Exception as exc:
             log.warning("Gisteren niet beschikbaar: %s", exc)
+    # A malformed page block may look like an item scheduled in the future.
+    items = [p for p in items if datetime.fromisoformat(p["started_at"]) <= t + timedelta(minutes=1)]
     if len(items) < 4:
         raise ValueError("KINK afspeellijst bevat onvoldoende nummers")
     return sorted(items, key=lambda p: p["started_at"])
