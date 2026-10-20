@@ -12,6 +12,7 @@ on:
       - 'notify.py'
       - 'forecast.py'
       - 'persist_state.py'
+      - 'audio_clips.py'
   workflow_dispatch:
   schedule:
     # Twee verschoven tijdreeksen (elk 10 min, samen iedere 5 min).
@@ -52,6 +53,21 @@ jobs:
         run: python monitor.py
         env:
           STREAM_URL: https://playerservices.streamtheworld.com/api/livestream-redirect/KINKAAC.aac
+      - name: Save short listen-back MP3 as temporary GitHub artifact
+        id: audio_upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: kink-audio-${{ github.run_id }}
+          path: artifact_audio/*.mp3
+          if-no-files-found: ignore
+          retention-days: 3
+          compression-level: 0
+      - name: Attach audio download link to observed Metallica event
+        if: ${{ steps.audio_upload.outputs.artifact-id != '' }}
+        run: python audio_clips.py
+        env:
+          AUDIO_ARTIFACT_ID: ${{ steps.audio_upload.outputs.artifact-id }}
+          GITHUB_RUN_ID: ${{ github.run_id }}
       - name: Send GitHub notifications for new Metallica plays and letters
         run: python notify.py
         env:
