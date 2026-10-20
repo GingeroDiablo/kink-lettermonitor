@@ -232,7 +232,7 @@ if(fingerprint!==lastEventsFingerprint){
    input.addEventListener("change",function(){
     var f=input.files&&input.files[0];
     if(!f)return;
-    if(!/\\.mp3$/i.test(f.name)){window.alert("Kies het uitgepakte MP3-bestand (geen ZIP).");return}
+    if(!/\.mp3$/i.test(f.name)){window.alert("Kies het uitgepakte MP3-bestand (geen ZIP).");return}
     if(localClipUrls[key])URL.revokeObjectURL(localClipUrls[key]);
     var url=URL.createObjectURL(f);localClipUrls[key]=url;
     player.src=url;player.hidden=false;player.load();
