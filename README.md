@@ -69,6 +69,23 @@ git push -u origin main
 
 Daarna stappen 5–8 hierboven.
 
+## Korte terugluisterfragmenten (GitHub-artifact)
+
+Wanneer de radiomonitor een Metallica-uitzending **echt opneemt** en het volgende nummer kan vaststellen, maakt hij automatisch een kleine MP3 rond de overgang tussen de nummers (maximaal ongeveer 115 seconden). De codeletter wordt mogelijk tussen de liedjes genoemd; daarom begint het fragment ook een stukje vóór het tijdstip waarop het volgende liedje in KINKs afspeellijst staat. Het bestand kan dus ook enkele seconden muziek bevatten.
+
+**Belangrijk:** GitHub Pages is een openbare statische site en kan niet met jouw GitHub-account een beschermd Actions-artifact streamen. Daarom is er bewust **geen rechtstreeks afspeelbare externe audio-URL** in het publieke dashboard.
+
+Terugluisteren:
+1. Ga in **Opnames & aanwijzingen** naar een waarneming waar **Download audiofragment (ZIP)** staat.
+2. Klik de link, log zo nodig in op GitHub en download het artifact. Pak het ZIP-bestand uit op je telefoon of computer.
+3. Klik bij die opname op **Beluister MP3**, selecteer het uitgepakte MP3-bestand en luister via de speler die daar verschijnt. Het bestand wordt alleen lokaal in je browser geladen, niet naar GitHub Pages verstuurd.
+4. Zoeken naar een oude uitzending zonder downloadlink heeft geen zin: GitHub kan opnamefouten, gemiste triggers en ontbrekende eindtijden niet achteraf herstellen.
+
+Technisch: `audio_clips.py` schrijft naar `artifact_audio/` (genegeerd door Git), `actions/upload-artifact@v4` bewaart de MP3 **drie dagen**, en de upload-ID komt pas na een geslaagde upload via `audio_clips.py` in `docs/data/state.json`. De clip wordt niet naar `docs/` gekopieerd. Na het verlopen van GitHub's artifactbewaring werkt de downloadlink niet meer.
+
+**Rechten/privacy:** ook een kort radiofragment kan beschermd zijn. Een artifact van een **openbare repository is niet privé**; beperk gebruik tot wat je rechten en de regels van KINK toestaan. Voor permanent publiek afspelen of het verspreiden van opgenomen radiogeluid is doorgaans toestemming nodig.
+
+
 ## Dashboard en opslag
 
 - De **officiële** Metallica-trackposities worden automatisch uit de KINK 1500 herlezen; de 11 nu publiek bekende posities zitten als startlijst in het project. Als KINK de top 10 nog niet heeft bekendgemaakt, kan een Metallica-nummer tijdelijk met positie **?** verschijnen. Zodra de ranking officieel bekend is, wordt de positie hersteld.
@@ -76,7 +93,7 @@ Daarna stappen 5–8 hierboven.
 - Klik een nummer aan om zelf **één letter A–Z** te bevestigen. Die bevestiging blijft **uitsluitend in de lokale opslag van die browser** (privacy, geen GitHub-login/API-sleutel in de publieke browser).
 - Gebruik **Back-up JSON / Importeer JSON** voor overdracht tussen telefoon/computer of bij browserreset.
 - **CSV-export** voor een eigen overzicht; je codewoord kun je zelf vormen met de verzamelde letters.
-- De app publiceert geen audioclips; automatisch herkennen van een individuele gesproken letter kan verkeerd gaan.
+- De app publiceert geen audioclips op GitHub Pages. Tijdelijke audiofragmenten worden alleen via GitHub Actions-artifacts aangeboden; automatische letterherkenning kan verkeerd gaan.
 
 ## Waarom een openbare repository?
 
