@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo
 import requests
 from bs4 import BeautifulSoup
 from forecast import update_forecasts
+from audio_clips import create_clip
 
 ROOT = Path(__file__).resolve().parent
 STATE_PATH = ROOT / "docs/data/state.json"
@@ -304,6 +305,9 @@ def record(state, rank):
                      suggested_letter=suggestion,
                      evidence=("Automatisch herkend; controleer transcript" if suggestion else issue),
                      status=("LETTERVOORSTEL" if suggestion else "TRANSCRIPT CONTROLEREN"))
+        # The WAV disappears with the runner. Keep only a short MP3 in an
+        # untracked directory for GitHub Actions artifact upload, never /docs.
+        create_clip(audio, offset, event)
         state["last_error"] = issue
 
 def main():
