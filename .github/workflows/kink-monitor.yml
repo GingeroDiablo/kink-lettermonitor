@@ -11,6 +11,7 @@ on:
       - '.github/workflows/kink-monitor.yml'
       - 'notify.py'
       - 'forecast.py'
+      - 'persist_state.py'
   workflow_dispatch:
   schedule:
     # Twee verschoven tijdreeksen (elk 10 min, samen iedere 5 min).
@@ -33,9 +34,11 @@ jobs:
     outputs:
       changed: ${{ steps.persist.outputs.changed }}
     steps:
-      - name: Checkout
+      - name: Checkout latest main
         uses: actions/checkout@v4
         with:
+          ref: main
+          fetch-depth: 0
           persist-credentials: true
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -55,20 +58,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           NOTIFY_USER: GingeroDiablo
-      - name: Save observed letters and transcripts
+      - name: Save observed letters and transcripts safely
         id: persist
-        shell: bash
-        run: |
-          if git diff --quiet -- docs/data/state.json; then
-            echo 'changed=false' >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/data/state.json
-          git commit -m 'Update KINK 1500 results [skip ci]'
-          git push
-          echo 'changed=true' >> "$GITHUB_OUTPUT"
+        run: python persist_state.py
 
   # Publiceer uitsluitend het dashboard uit docs/ op de Pages-root.
   publish:
