@@ -82,7 +82,9 @@ footer{margin-top:35px;text-align:center;font-size:12px;color:var(--muted)}
 <div class="statusline" id="status">Status ophalen…</div>
 <div class="micro" id="checked">Laatste opgeslagen radiocontrole: —</div>
 <div class="micro" id="delaynotice">GitHub Actions voert de controle uit; geplande runs kunnen vertragen.</div>
-<button class="btn" id="manual-refresh" type="button">↻ Ververs laatste status</button>
+<button class="btn" id="manual-refresh" type="button">↻ Vernieuw dashboardgegevens</button>
+<div class="micro" id="manual-feedback" role="status" aria-live="polite">Deze knop leest de gepubliceerde gegevens opnieuw. Hij start geen nieuwe GitHub-radioscan.</div>
+<a class="btn" target="_blank" rel="noopener" href="https://github.com/GingeroDiablo/kink-lettermonitor/actions/workflows/kink-monitor.yml">Nieuwe radiocontrole starten via GitHub ↗</a>
 <div class="micro" id="ghrun">GitHub Actions: status ophalen…</div>
 <a class="btn" href="https://github.com/GingeroDiablo/kink-lettermonitor/actions/workflows/kink-monitor.yml" target="_blank" rel="noopener">Bekijk live controles op GitHub ↗</a>
 <div class="micro" id="nowplaying">Laatst bekend: —</div>
@@ -242,10 +244,22 @@ $("csv").addEventListener("click",function(){var rows=[["Positie","Metallica num
 $("import").addEventListener("click",function(){$("input").click()});
 $("input").addEventListener("change",function(e){var f=e.target.files[0];if(!f)return;f.text().then(function(s){var obj=JSON.parse(s),values=obj.letters||obj;var next={};Object.keys(values).forEach(function(k){if(/^[-]?\d+$/.test(k)&&/^[A-Z]$/.test(values[k]))next[k]=values[k]});overrides=next;store();update();window.alert("Letters geïmporteerd")}).catch(function(){window.alert("Ongeldig JSON-bestand")});e.target.value=""});
 $("manual-refresh").addEventListener("click",async function(){
- var btn=$("manual-refresh");
- btn.disabled=true;btn.textContent="Status ophalen…";
- try {await Promise.all([refresh(),refreshRun()]);}
- finally {btn.disabled=false;btn.textContent="↻ Ververs laatste status";}
+ var btn=$("manual-refresh"), feedback=$("manual-feedback");
+ btn.disabled=true;btn.textContent="Gegevens ophalen…";
+ feedback.textContent="GitHub Pages en GitHub Actions worden gecontroleerd…";
+ try {
+  await Promise.all([refresh(),refreshRun()]);
+  var checked=state.last_checked?dateText(state.last_checked):"onbekend";
+  var time=new Date().toLocaleTimeString("nl-NL",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  feedback.textContent="Dashboard opnieuw opgehaald om "+time+
+   ". Laatst opgeslagen radiocontrole: "+checked+
+   ". Ongewijzigde waarden betekenen dat GitHub geen nieuw resultaat heeft gepubliceerd. "+
+   "Een nieuwe radioscan start je via de GitHub-knop hieronder.";
+ }catch(e) {
+  feedback.textContent="Opnieuw ophalen mislukt: "+String(e);
+ }finally {
+  btn.disabled=false;btn.textContent="↻ Vernieuw dashboardgegevens";
+ }
 });
 update();refresh();refreshRun();
 setInterval(refresh,60000);
