@@ -51,6 +51,9 @@ h1 em{font-style:normal;color:var(--red)}
 .trace .when{font-size:11px;color:var(--muted)}.trace .title{font-size:13px;font-weight:800;margin:4px 0}
 .trace .proposal{color:var(--yellow);font-weight:850}
 .transcript{color:#c2ccdc;font-size:12px;margin-top:8px;background:#0d1421;border-radius:8px;padding:9px;max-height:140px;overflow:auto}
+.audioactions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
+.audioplayer{width:100%;height:42px;margin-top:8px}
+.audiotip{font-size:11px;color:var(--muted);margin-top:7px}
 .footnote{border-left:3px solid var(--yellow);padding:12px 14px;background:#ffc67911;color:#cbd5e5;font-size:12px;border-radius:0 8px 8px 0}
 .actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px}.empty{padding:30px 10px;text-align:center;color:var(--muted);font-size:13px}
 .link{color:#ff9da0;font-weight:750}
@@ -110,7 +113,7 @@ footer{margin-top:35px;text-align:center;font-size:12px;color:var(--muted)}
 <div id="tracks" class="empty">Hitlijst wordt geladen…</div></section>
 </div>
 <div>
-<section class="card section" style="margin-bottom:20px"><div class="sectionhead"><h2>Opnames &amp; aanwijzingen</h2><small id="eventsCount">0 waarnemingen</small></div><div id="events" class="empty">Er zijn nog geen Metallica-nummers geregistreerd.</div></section>
+<section class="card section" style="margin-bottom:20px"><div class="sectionhead"><h2>Opnames &amp; aanwijzingen</h2><small id="eventsCount">0 waarnemingen</small></div><p class="micro" style="margin:0 0 14px">Bij nieuwe opnames verschijnt een korte, tijdelijke MP3 via GitHub (3 dagen bewaard). Download het ZIP-bestand, pak de MP3 uit en kies hier <strong>Beluister MP3</strong>. Audio staat niet openbaar op deze site.</p><div id="events" class="empty">Er zijn nog geen Metallica-nummers geregistreerd.</div></section>
 <div class="footnote" style="margin-bottom:14px"><strong>Pushmeldingen bij Metallica en nieuwe lettervoorstellen:</strong> installeer de gratis GitHub-app, log in met GingeroDiablo en schakel onder Profiel → Instellingen → Configure Notifications de pushmeldingen voor <strong>Direct mentions</strong> in. Je wordt in een GitHub-issue genoemd zodra een nieuwe relevante waarneming wordt opgeslagen. <a class="link" target="_blank" rel="noopener" href="https://github.com/GingeroDiablo/kink-lettermonitor/issues">Open meldingen ↗</a></div>
 <div class="footnote">Let op: GitHub Actions wordt niet precies op tijd gestart. Bij gemiste aankondigingen kan KINKs herhaling tussen 19.00 en 08.00 uur helpen. Deze monitor is geen garantie op een volledig codewoord.</div>
 </div>
@@ -121,7 +124,7 @@ footer{margin-top:35px;text-align:center;font-size:12px;color:var(--muted)}
 (function(){
 "use strict";
 var STORE="kink-metallica-letters-v1";
-var state={tracks:[],events:[]}, overrides={}, lastGithubRun=null;
+var state={tracks:[],events:[]}, overrides={}, lastGithubRun=null, lastEventsFingerprint=null, localClipUrls={};
 try{overrides=JSON.parse(localStorage.getItem(STORE)||"{}")}catch(e){overrides={}}
 function $(id){return document.getElementById(id)}
 function elt(tag,cls,text){var node=document.createElement(tag);if(cls)node.className=cls;if(text!==undefined)node.textContent=text;return node}
@@ -197,17 +200,52 @@ list.forEach(function(t){
 });
 var events=(state.events||[]).slice().sort(function(a,b){return new Date(b.started_at)-new Date(a.started_at)});
 $("eventsCount").textContent=events.length+" waarnemingen";
-$("events").replaceChildren();
-if(!events.length)$("events").append(elt("p","empty","Nog geen Metallica geregistreerd."));
-events.forEach(function(e){
- var row=elt("div","trace");
- row.append(elt("div","when",dateText(e.started_at)+(e.replay?" · Herhaling":"")+(e.rank>0?" · #"+e.rank:"")));
- row.append(elt("div","title",e.title));
- row.append(elt("div","micro","Status: "+(e.status||"Gezien")));
- if(e.suggested_letter)row.append(elt("div","proposal","Onbevestigd voorstel: "+e.suggested_letter));
- if(e.transcript)row.append(elt("div","transcript",e.transcript));
- $("events").append(row);
-});
+// Leave audio players mounted during automatic dashboard refreshes.
+var fingerprint=JSON.stringify(events);
+if(fingerprint!==lastEventsFingerprint){
+ lastEventsFingerprint=fingerprint;
+ $("events").replaceChildren();
+ if(!events.length)$("events").append(elt("p","empty","Nog geen Metallica geregistreerd."));
+ events.forEach(function(e){
+  var row=elt("div","trace");
+  row.append(elt("div","when",dateText(e.started_at)+(e.replay?" · Herhaling":"")+(e.rank>0?" · #"+e.rank:"")));
+  row.append(elt("div","title",e.title));
+  row.append(elt("div","micro","Status: "+(e.status||"Gezien")));
+  if(e.suggested_letter)row.append(elt("div","proposal","Onbevestigd voorstel: "+e.suggested_letter));
+  if(e.transcript)row.append(elt("div","transcript",e.transcript));
+  var clip=e.audio;
+  if(clip && Number.isSafeInteger(clip.run_id) && Number.isSafeInteger(clip.artifact_id)){
+   var actions=elt("div","audioactions");
+   var link=elt("a","btn","↓ Download audiofragment (ZIP) ↗");
+   link.href="https://github.com/GingeroDiablo/kink-lettermonitor/actions/runs/"+clip.run_id+"/artifacts/"+clip.artifact_id;
+   link.target="_blank";link.rel="noopener noreferrer";
+   actions.append(link);
+   var choose=elt("button","btn","▶ Beluister MP3");
+   choose.type="button";
+   var input=elt("input");
+   input.type="file";input.accept=".mp3,audio/mpeg";input.hidden=true;
+   var player=elt("audio","audioplayer");
+   player.controls=true;player.preload="none";player.hidden=true;
+   var key=String(e.started_at)+"|"+String(e.title);
+   if(localClipUrls[key]){player.src=localClipUrls[key];player.hidden=false}
+   choose.addEventListener("click",function(){input.click()});
+   input.addEventListener("change",function(){
+    var f=input.files&&input.files[0];
+    if(!f)return;
+    if(!/\\.mp3$/i.test(f.name)){window.alert("Kies het uitgepakte MP3-bestand (geen ZIP).");return}
+    if(localClipUrls[key])URL.revokeObjectURL(localClipUrls[key]);
+    var url=URL.createObjectURL(f);localClipUrls[key]=url;
+    player.src=url;player.hidden=false;player.load();
+   });
+   actions.append(choose);actions.append(input);
+   row.append(actions);row.append(player);
+   row.append(elt("div","audiotip","Fragment ongeveer "+(clip.duration_max_seconds||115)+" seconden. GitHub-login nodig voor downloaden; de link vervalt na maximaal "+(clip.retention_days||3)+" dagen."));
+  }else{
+   row.append(elt("div","audiotip","Geen terugluisterfragment beschikbaar; deze uitzending werd niet op tijd opgenomen."));
+  }
+  $("events").append(row);
+ });
+}
 }
 async function refreshRun(){
  try {
