@@ -81,6 +81,16 @@ jobs:
           fi
       - name: Run unit tests
         run: python -m unittest discover -s tests -q
+      - name: Verify offline Dutch speech model on code changes
+        if: ${{ github.event_name == 'push' }}
+        timeout-minutes: 8
+        run: |
+          python -m pip install -q 'faster-whisper>=1.1,<2'
+          python - <<'PY'
+          from faster_whisper import WhisperModel
+          model = WhisperModel("base", device="cpu", compute_type="int8")
+          print("Offline Dutch recognition engine loaded successfully")
+          PY
       - name: Check KINK and record nearby Metallica
         run: python monitor.py
       - name: Save short listen-back MP3 as temporary GitHub artifact
