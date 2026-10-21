@@ -226,6 +226,13 @@ def letter_from_text(text):
         r"(?:is|was|luidt|wordt|:|van)?\s*(?:de\s+)?([A-Za-z])(?=\W|$)",
         text, flags=re.IGNORECASE
     )
+    # Presenters sometimes say the letter *before* the song, with the
+    # song title between "letter" and "is". Keep the explicit cue requirement.
+    candidates += re.findall(
+        r"\b(?:codeletter|code\s*letter|de\s+letter|letter)\b"
+        r"[^.!?\n]{0,100}?\b(?:is|was|wordt|luidt)\s+(?:de\s+)?([A-Za-z])(?=\W|$)",
+        text, flags=re.IGNORECASE,
+    )
     candidates = {c.upper() for c in candidates}
     return next(iter(candidates)) if len(candidates) == 1 else None
 
