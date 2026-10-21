@@ -31,7 +31,7 @@ concurrency:
 jobs:
   watch:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     outputs:
       changed: ${{ steps.persist.outputs.changed }}
     steps:
@@ -45,6 +45,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Restore speech recognition model between runs
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface/hub
+          key: kink-whisper-base-v1
       - name: Install requirements
         run: python -m pip install -q -r requirements.txt
       - name: Install and verify audio capture tools
