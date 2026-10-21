@@ -67,6 +67,55 @@ def create_clip(recording, ending_offset, event):
     return dest
 
 
+
+def create_announcement_clips(recording, event, song_offset=None, next_offset=None):
+    """Extract before-song and after-song fragments when available.
+
+    Offsets are seconds relative to recording start; a late recorder
+    cannot recover a pre-song announcement.
+    """
+    OUT.mkdir(parents=True, exist_ok=True)
+    clips = {}
+    base = clip_name(event).removesuffix(".mp3")
+    windows = []
+    if song_offset is not None and song_offset >= 25:
+        windows.append(("voor", max(0, song_offset - 135), song_offset + 25))
+    if next_offset is not None and next_offset >= 25:
+        windows.append(("na", max(0, next_offset - 80), next_offset + 75))
+    duration_estimate = (recording.stat().st_size - 78) / 32000 if recording.exists() else 0
+    for label, first, last in windows:
+        if duration_estimate < first + 12:
+            continue
+        duration = min(160.0, last - first, duration_estimate - first)
+        if duration < 12:
+            continue
+        dest = OUT / f"{base}-{label}.mp3"
+        try:
+            subprocess.run(
+                ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
+                 "-ss", str(round(first, 2)), "-t", str(round(duration, 2)),
+                 "-i", str(recording), "-vn", "-ac", "1", "-ar", "22050",
+                 "-c:a", "libmp3lame", "-b:a", "56k", str(dest)],
+                capture_output=True, timeout=75, check=True,
+            )
+            if dest.stat().st_size < 20000:
+                dest.unlink(missing_ok=True)
+                continue
+            clips[label] = str(dest)
+        except (OSError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as exc:
+            log.warning("Audio %s was not created: %s", label, exc)
+            dest.unlink(missing_ok=True)
+    if clips:
+        (OUT / "clip_manifest.json").write_text(json.dumps({
+            "title": event["title"], "started_at": event["started_at"],
+            "filename": Path(next(iter(clips.values()))).name,
+            "files": {k: Path(v).name for k, v in clips.items()},
+            "duration_max_seconds": 160,
+        }, ensure_ascii=False, indent=2), encoding="utf-8")
+        log.info("Prepared %s listen-back clip(s) for %s", len(clips), event["title"])
+    return clips
+
+
 def register_artifact():
     """Attach link only after upload-artifact has returned a real artifact ID."""
     artifact = os.getenv("AUDIO_ARTIFACT_ID", "").strip()
@@ -87,6 +136,7 @@ def register_artifact():
                 "run_id": int(run_id),
                 "artifact_id": int(artifact),
                 "filename": manifest["filename"],
+                "files": manifest.get("files", {"na": manifest["filename"]}),
                 "retention_days": 3,
                 "duration_max_seconds": manifest["duration_max_seconds"],
             }
