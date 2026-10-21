@@ -256,7 +256,7 @@ def recognize_clips(clips):
     return summary, None, "Geen expliciete codeletter herkend; luister fragmenten terug"
 
 
-def record(state, rank):
+def record(state, rank, rankmap):
     """Begin before the track where possible; retain speech from both sides."""
     if not shutil.which("ffmpeg"):
         raise RuntimeError("ffmpeg ontbreekt; opname is niet uitgevoerd")
@@ -285,10 +285,7 @@ def record(state, rank):
                     time.sleep(18)
                     try:
                         playlist = recent()
-                        update_tracks(state, {
-                            t["rank"]: {"artist": "Metallica", "title": t["title"]}
-                            for t in state["tracks"] if t["rank"] > 0
-                        }, playlist)
+                        update_tracks(state, rankmap, playlist)
                         update_events(state, playlist)
                         matches = [
                             (i, p) for i, p in enumerate(playlist)
@@ -334,7 +331,7 @@ def record(state, rank):
                       if e["started_at"] == detected["started_at"]
                       and normalized(e["title"]) == normalized(detected["title"])), None)
         if event is None:
-            update_tracks(state, {}, [detected])
+            update_tracks(state, rankmap, [detected])
             update_events(state, [detected])
             event = next((e for e in state["events"]
                           if e["started_at"] == detected["started_at"]
@@ -384,7 +381,7 @@ def main():
         state["last_error"] = None
         if target is not None:
             state["status"] = "Opname gestart rond Metallica #" + str(target)
-            record(state, target)
+            record(state, target, rankmap)
             state["status"] = "Opname afgerond; letters zelf verifiëren"
     except Exception as exc:
         log.exception("Monitorcontrole mislukt")
