@@ -201,13 +201,14 @@ def upcoming_replay(state, timestamp):
     local = timestamp.astimezone(TZ)
     # KINK repeats the daytime list after 19:00, not a continuously
     # advancing ranking at night. Predict from *today's* original plays.
-    if local.hour < 18 and local.hour >= 8:
+    if 8 <= local.hour < 18:
         return None
+    broadcast_date = (local - timedelta(days=1)).date() if local.hour < 8 else local.date()
     shift = replay_delay_minutes(state)
     options = []
     for event in state.get("events", []):
         original = datetime.fromisoformat(event["started_at"]).astimezone(TZ)
-        if not 8 <= original.hour < 19 or original.date() != local.date():
+        if not 8 <= original.hour < 19 or original.date() != broadcast_date:
             continue
         if event.get("rank", 0) <= 0:
             continue
@@ -215,7 +216,7 @@ def upcoming_replay(state, timestamp):
             repeat for repeat in state.get("events", [])
             if repeat.get("title") == event.get("title")
             and repeat.get("replay")
-            and datetime.fromisoformat(repeat["started_at"]).astimezone(TZ).date() == local.date()
+            and datetime.fromisoformat(repeat["started_at"]).astimezone(TZ).date() >= broadcast_date
         ]
         # A replay already heard with no clip cannot be recovered afterwards.
         if repeats:
