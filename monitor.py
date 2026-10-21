@@ -15,7 +15,7 @@ from zoneinfo import ZoneInfo
 import requests
 from bs4 import BeautifulSoup
 from forecast import update_forecasts
-from audio_clips import create_clip
+from audio_clips import create_announcement_clips
 
 ROOT = Path(__file__).resolve().parent
 STATE_PATH = ROOT / "docs/data/state.json"
@@ -128,22 +128,27 @@ def update_tracks(state, rankmap, played):
     official = [{"rank": k, "title": v["title"]} for k, v in rankmap.items()
                 if normalized(v["artist"]) == "metallica"]
     known = {normalized(t["title"]): t["rank"] for t in official}
+    unknown_rank = {normalized(t["title"]): t["rank"] for t in state.get("tracks", [])
+                    if t.get("rank", 0) < 0}
     for old in state.get("tracks", []):
         if old["rank"] < 0 and normalized(old["title"]) not in known:
             official.append(old)
     for e in state["events"]:
         if e.get("rank", 0) < 0 and normalized(e["title"]) in known:
             e["rank"] = known[normalized(e["title"])]
-    for p in played[-12:]:
-        dt = datetime.fromisoformat(p["started_at"])
+    # Track every heard Metallica title, including undisclosed top-10 songs.
+    for p in played:
         if normalized(p["artist"]) != "metallica":
             continue
-        if not (0 <= (now() - dt).total_seconds() <= 18 * 60):
-            continue
-        if normalized(p["title"]) not in {normalized(t["title"]) for t in official}:
-            temp_rank = min([0] + [t["rank"] for t in official]) - 1
-            official.append({"rank": temp_rank, "title": p["title"]})
+        song = normalized(p["title"])
+        if song not in known and song not in {normalized(t["title"]) for t in official}:
+            temp_rank = unknown_rank.get(song)
+            if temp_rank is None:
+                temp_rank = min([0] + [t["rank"] for t in official]) - 1
+            official.append({"rank": temp_rank, "title": p["title"], "provisional": True})
+            unknown_rank[song] = temp_rank
     state["tracks"] = sorted(official, key=lambda t: -t["rank"])
+    state["top10_unrevealed"] = [rank for rank in range(1, 11) if rank not in rankmap]
 
 def update_events(state, played):
     title_to_rank = {normalized(t["title"]): t["rank"] for t in state["tracks"]}
@@ -177,11 +182,12 @@ def pick_target(state, rankmap, played):
     tracks = state["tracks"]
     lastplay = last[-1]
     if normalized(lastplay["artist"]) == "metallica":
-        for track in tracks:
-            if normalized(track["title"]) == normalized(lastplay["title"]):
-                age = (t - datetime.fromisoformat(lastplay["started_at"])).total_seconds()
-                if 0 <= age <= 8 * 60:
+        age = (t - datetime.fromisoformat(lastplay["started_at"])).total_seconds()
+        if 0 <= age <= 9 * 60:
+            for track in tracks:
+                if normalized(track["title"]) == normalized(lastplay["title"]):
                     return track["rank"]
+            return 0  # Unknown Metallica title: listen even if not on published list.
     ranked = {}
     for rank, item in rankmap.items():
         ranked[(normalized(item["artist"]), normalized(item["title"]))] = rank
@@ -193,8 +199,11 @@ def pick_target(state, rankmap, played):
             break
     if not last_rank:
         return None
+    # Don't presume the secret top 10 contains zero Metallica titles.
+    if last_rank <= 19 and state.get("top10_unrevealed"):
+        return 0
     for track in tracks:
-        if not 0 <= last_rank - track["rank"] <= 3:
+        if track["rank"] < 1 or not 0 <= last_rank - track["rank"] <= 7:
             continue
         proposals = sum(bool(e.get("suggested_letter")) for e in state["events"] if e["rank"] == track["rank"])
         if proposals >= 2:
@@ -215,100 +224,145 @@ def letter_from_text(text):
     candidates = {c.upper() for c in candidates}
     return next(iter(candidates)) if len(candidates) == 1 else None
 
-def recognize(wav, ending_offset):
-    # Crop only around the announcement, never publish or persist music.
-    if ending_offset < 25:
-        return None, None, "Opname begon te laat"
-    clip = wav.parent / "announcement.wav"
-    start = max(0, ending_offset - 75)
-    subprocess.run(["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
-                    "-ss", str(start), "-t", "180", "-i", str(wav),
-                    "-vn", "-ac", "1", "-ar", "16000", str(clip)],
-                   capture_output=True, timeout=80, check=True)
-    if clip.stat().st_size < 40000:
-        return None, None, "Audioclip leeg"
+def recognize_clips(clips):
+    """Transcribe BEFORE and AFTER snippets independently and compare proposals."""
+    if not clips:
+        return None, None, "Geen geluidsfragment ontvangen"
     try:
         from faster_whisper import WhisperModel
     except ImportError:
-        subprocess.run(["python", "-m", "pip", "install", "-q", "faster-whisper>=1.1,<2"],
-                       check=True, timeout=300)
+        subprocess.run(
+            ["python", "-m", "pip", "install", "-q", "faster-whisper>=1.1,<2"],
+            check=True, timeout=300,
+        )
         from faster_whisper import WhisperModel
     model = WhisperModel("base", device="cpu", compute_type="int8")
-    segments, _ = model.transcribe(
-        str(clip), language="nl", vad_filter=True, beam_size=5,
-        initial_prompt="KINK 1500 Metallica, de codeletter is een letter van het alfabet."
-    )
-    transcript = " ".join(s.text.strip() for s in segments)[:1500]
-    return transcript, letter_from_text(transcript), None
+    texts = {}
+    candidates = set()
+    for label, path in clips.items():
+        segments, _ = model.transcribe(str(path), language="nl",
+                                       vad_filter=True, beam_size=3,
+                                       condition_on_previous_text=False)
+        speech = " ".join(part.text.strip() for part in segments)[:1300]
+        texts[label] = speech
+        proposed = letter_from_text(speech)
+        if proposed:
+            candidates.add(proposed)
+    summary = " | ".join(f"{k.upper()}: {v or '(niets herkend)'}" for k, v in texts.items())
+    if len(candidates) == 1:
+        return summary, next(iter(candidates)), None
+    if len(candidates) > 1:
+        return summary, None, "Tegenstrijdige letters gehoord; controleer zelf"
+    return summary, None, "Geen expliciete codeletter herkend; luister fragmenten terug"
+
 
 def record(state, rank):
+    """Begin before the track where possible; retain speech from both sides."""
     if not shutil.which("ffmpeg"):
-        raise RuntimeError("ffmpeg ontbreekt")
-    target = next(t for t in state["tracks"] if t["rank"] == rank)
-    log.info("Live KINK opnemen rond Metallica #%s %s", rank, target["title"])
+        raise RuntimeError("ffmpeg ontbreekt; opname is niet uitgevoerd")
+    target = next((track for track in state["tracks"] if track["rank"] == rank), None)
+    requested_title = normalized(target["title"]) if target else None
+    log.info("Live stream bewaken rond %s",
+             target["title"] if target else "onbekend top-10 Metallica-nummer")
     with tempfile.TemporaryDirectory(prefix="kink-") as directory:
         audio = Path(directory) / "live.wav"
-        start_time = datetime.now(UTC)
-        process = subprocess.Popen(
-            ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
-             "-reconnect", "1", "-reconnect_streamed", "1", "-reconnect_delay_max", "5",
-             "-i", STREAM_URL, "-t", "780", "-vn", "-ac", "1", "-ar", "16000",
-             "-c:a", "pcm_s16le", str(audio)],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
-        )
-        start = end = None
-        try:
-            deadline = time.monotonic() + 750
-            while time.monotonic() < deadline and process.poll() is None:
-                time.sleep(30)
-                try:
-                    played = recent()
-                    update_events(state, played)
-                    matches = [(i, p) for i, p in enumerate(played)
-                               if normalized(p["artist"]) == "metallica"
-                               and normalized(p["title"]) == normalized(target["title"])
-                               and -30 <= (now() - datetime.fromisoformat(p["started_at"])).total_seconds() <= 2400]
-                    if not matches:
-                        continue
-                    i, p = matches[-1]
-                    start = p["started_at"]
-                    if i + 1 < len(played):
-                        end = datetime.fromisoformat(played[i + 1]["started_at"])
-                        if now() >= end + timedelta(seconds=115):
-                            break
-                except Exception as exc:
-                    log.warning("Playlist tijdelijk niet leesbaar: %s", exc)
-        finally:
-            if process.poll() is None:
-                process.terminate()
-                try:
-                    process.wait(timeout=8)
-                except subprocess.TimeoutExpired:
-                    process.kill()
-                    process.wait()
-        if not audio.exists() or audio.stat().st_size < 70000:
-            raise ValueError("Geen audio ontvangen van de KINK-radiostream")
+        errorlog = Path(directory) / "ffmpeg-stderr.log"
+        origin = datetime.now(UTC)
+        with errorlog.open("wb") as errors:
+            process = subprocess.Popen(
+                ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
+                 "-reconnect", "1", "-reconnect_streamed", "1",
+                 "-reconnect_delay_max", "5",
+                 "-i", STREAM_URL, "-t", "900", "-vn", "-ac", "1",
+                 "-ar", "16000", "-c:a", "pcm_s16le", str(audio)],
+                stdout=subprocess.DEVNULL, stderr=errors,
+            )
+            detected = None
+            started = ended = None
+            try:
+                deadline = time.monotonic() + 890
+                while time.monotonic() < deadline and process.poll() is None:
+                    time.sleep(18)
+                    try:
+                        playlist = recent()
+                        update_tracks(state, {
+                            t["rank"]: {"artist": "Metallica", "title": t["title"]}
+                            for t in state["tracks"] if t["rank"] > 0
+                        }, playlist)
+                        update_events(state, playlist)
+                        matches = [
+                            (i, p) for i, p in enumerate(playlist)
+                            if normalized(p["artist"]) == "metallica"
+                            and (requested_title is None
+                                 or normalized(p["title"]) == requested_title)
+                            and -540 <= (now() - datetime.fromisoformat(
+                                p["started_at"])).total_seconds() <= 15 * 60
+                            and (datetime.fromisoformat(p["started_at"])
+                                 .astimezone(UTC) >= origin - timedelta(minutes=6))
+                        ]
+                        if not matches:
+                            continue
+                        i, p = matches[-1]
+                        detected = p
+                        started = datetime.fromisoformat(p["started_at"])
+                        if i + 1 < len(playlist):
+                            ended = datetime.fromisoformat(playlist[i + 1]["started_at"])
+                            if now() >= ended + timedelta(seconds=78):
+                                break
+                    except Exception as exc:
+                        log.warning("Afspeellijst tijdelijk niet leesbaar: %s", exc)
+            finally:
+                if process.poll() is None:
+                    process.terminate()
+                    try:
+                        process.wait(timeout=8)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        process.wait()
+        size = audio.stat().st_size if audio.exists() else 0
+        if size < 70000:
+            details = errorlog.read_text(errors="replace")[-420:]
+            raise ValueError("Geen geluid uit KINK-stream ontvangen: " + details)
         state["last_recording"] = now().isoformat()
-        if start is None or end is None:
-            state["last_error"] = "Opname gemaakt, maar geen eindtijd van Metallica bevestigd"
+        if not detected:
+            log.info("Binnen opnamevenster geen Metallica-uitzending gedetecteerd")
             return
-        offset = (end.astimezone(UTC) - start_time).total_seconds()
+
+        # Always associate the recording with a playlist event, even if the
+        # next song has not yet appeared and the post-song clip is impossible.
+        event = next((e for e in state["events"]
+                      if e["started_at"] == detected["started_at"]
+                      and normalized(e["title"]) == normalized(detected["title"])), None)
+        if event is None:
+            update_tracks(state, {}, [detected])
+            update_events(state, [detected])
+            event = next((e for e in state["events"]
+                          if e["started_at"] == detected["started_at"]
+                          and normalized(e["title"]) == normalized(detected["title"])), None)
+        if event is None:
+            log.warning("Opname aanwezig, geen bijbehorende playlistwaarneming")
+            return
+
+        begin_offset = (started.astimezone(UTC) - origin).total_seconds()
+        end_offset = ((ended.astimezone(UTC) - origin).total_seconds()
+                      if ended else None)
+        clips = create_announcement_clips(audio, event, begin_offset, end_offset)
+        if not clips:
+            event["status"] = "OPNAME ONVOLLEDIG"
+            event["evidence"] = "Geen bruikbaar audiofragment rond begin of einde"
+            return
         try:
-            text, suggestion, issue = recognize(audio, offset)
+            text, suggestion, issue = recognize_clips(clips)
         except Exception as exc:
             text, suggestion, issue = None, None, "Spraakherkenning: " + str(exc)[:160]
-        event = next((e for e in state["events"] if e["rank"] == rank and e["started_at"] == start), None)
-        if event is None:
-            event = {"rank": rank, "title": target["title"], "started_at": start, "replay": False}
-            state["events"].append(event)
-        event.update(ended_at=end.isoformat(), transcript=text,
-                     suggested_letter=suggestion,
-                     evidence=("Automatisch herkend; controleer transcript" if suggestion else issue),
-                     status=("LETTERVOORSTEL" if suggestion else "TRANSCRIPT CONTROLEREN"))
-        # The WAV disappears with the runner. Keep only a short MP3 in an
-        # untracked directory for GitHub Actions artifact upload, never /docs.
-        create_clip(audio, offset, event)
-        state["last_error"] = issue
+        event.update(transcript=text, suggested_letter=suggestion,
+                     evidence=("Onbevestigd voorstel; luister fragmenten terug"
+                               if suggestion else issue),
+                     status=("LETTERVOORSTEL" if suggestion else
+                             "AUDIO BESCHIKBAAR – LETTER CONTROLEREN"))
+        log.info("Metallica %s: %s (voor/na: %s)",
+                 event["title"], suggestion or "geen bevestigde letter",
+                 ",".join(clips))
 
 def main():
     prior = load()
