@@ -69,9 +69,44 @@ git push -u origin main
 
 Daarna stappen 5–8 hierboven.
 
+## Reparatie 21 oktober 2026: gesproken letters vóór én na Metallica
+
+De eerste uitvoeringen **konden niet opnemen** omdat de Ubuntu-GitHub-runner
+geen `ffmpeg` bevatte. De workflow installeert dat programma nu expliciet,
+controleert dat het werkt en test of de hoofdzender KINK daadwerkelijk audio
+uitstuurt. Bij falen zoekt hij een alternatieve KINK-stream in AAC of MP3.
+Zo meldt de app geen geslaagde audiocontrole wanneer de stream ontbreekt.
+
+De monitor begint **voor** het nummer als een bekende Metallica-positie
+binnen circa zeven lijstposities nadert. Hij luistert maximaal ongeveer
+vijftien minuten en kan twee aparte bestanden maken:
+
+- `-voor.mp3`: ongeveer de twee minuten vóór het begin plus een kort stukje erna;
+- `-na.mp3`: ongeveer tachtig seconden vóór het volgende nummer plus een
+  stukje erna.
+
+Beide fragmenten worden afzonderlijk door Whisper onderzocht. Eén expliciete
+letter is een **onbevestigd voorstel**, geen zekerheid; bij tegenstrijdige
+letters vraagt de app om een menselijke controle. Als de opname te laat begon,
+kan het ontbrekende deel **niet achteraf** worden teruggehaald. Daarom zijn
+de nachtelijke herhalingen bij KINK belangrijk.
+
+De **geheime top 10** mag extra Metallica-nummers bevatten. De monitor
+houdt alle nieuw gesignaleerde Metallica-titels bij, ook als er nog geen
+positie bekend is, en houdt tijdens de laatste uren van 30 oktober
+rekening met nog niet gepubliceerde top-10-noteringen. Onbekende titels
+krijgen tijdelijk `#?` en worden later waar mogelijk aan hun echte
+positie gekoppeld.
+
+**Grenzen:** GitHub Actions starttijden zijn niet gegarandeerd en een
+uitgezonden letter kan dus ondanks deze reparaties gemist worden.
+Vooraf aangekondigde letterfragmenten die vóór het begin van een GitHub-run
+vallen, zijn niet terug te winnen. De audio-artifacts zijn maximaal
+drie dagen beschikbaar, alleen als werkelijk een opname is gemaakt.
+
 ## Korte terugluisterfragmenten (GitHub-artifact)
 
-Wanneer de radiomonitor een Metallica-uitzending **echt opneemt** en het volgende nummer kan vaststellen, maakt hij automatisch een kleine MP3 rond de overgang tussen de nummers (maximaal ongeveer 115 seconden). De codeletter wordt mogelijk tussen de liedjes genoemd; daarom begint het fragment ook een stukje vóór het tijdstip waarop het volgende liedje in KINKs afspeellijst staat. Het bestand kan dus ook enkele seconden muziek bevatten.
+Wanneer de radiomonitor een Metallica-uitzending **echt opneemt**, maakt hij waar mogelijk twee kleine MP3's: vóór de start en rond het einde, ook als maar één van beide tijdstippen bekend is. De codeletter wordt mogelijk tussen de liedjes genoemd; daarom begint het fragment ook een stukje vóór het tijdstip waarop het volgende liedje in KINKs afspeellijst staat. Het bestand kan dus ook enkele seconden muziek bevatten.
 
 **Belangrijk:** GitHub Pages is een openbare statische site en kan niet met jouw GitHub-account een beschermd Actions-artifact streamen. Daarom is er bewust **geen rechtstreeks afspeelbare externe audio-URL** in het publieke dashboard.
 
