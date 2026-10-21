@@ -109,6 +109,7 @@ footer{margin-top:35px;text-align:center;font-size:12px;color:var(--muted)}
 <div class="actions"><button class="btn" id="export">Back-up JSON</button><button class="btn" id="csv">Exporteer CSV</button><button class="btn" id="import">Importeer back-up</button><input id="input" type="file" accept=".json,application/json" hidden></div>
 </section>
 <section class="card section"><div class="sectionhead"><h2>Metallica in de KINK 1500</h2><small>Handmatig bevestigen ↓</small></div>
+<div class="forecast-info" id="top10notice" hidden>De top 10 is nog niet volledig bekend. Er kan extra Metallica tussen staan. De monitor bewaakt ook onbekende titels en toont deze voorlopig met positie #?.</div>
 <div class="forecast-info" id="forecastinfo"><strong>Verwachte uitzendtijden</strong> · schattingen voor 08.00–19.00 uur op werkdagen. De echte tijden kunnen afwijken; herhalingen zijn niet ingepland.</div>
 <div id="tracks" class="empty">Hitlijst wordt geladen…</div></section>
 </div>
@@ -141,7 +142,7 @@ function forecastText(p){
 }
 function tracks(){return (state.tracks||[]).slice().sort(function(a,b){return b.rank-a.rank})}
 function evidence(rank){var e=(state.events||[]).filter(function(x){return x.rank===rank && !!x.suggested_letter});return e.length?e[e.length-1].suggested_letter:null}
-function code(){return tracks().map(function(t){return overrides[String(t.rank)]||"?"}).join("")}
+function code(){return tracks().filter(function(t){return t.rank>0}).map(function(t){return overrides[String(t.rank)]||"?"}).join("")}
 function renderStatus(){
  var lag=elapsedMinutes(state.last_checked);
  var runLag=lastGithubRun?elapsedMinutes(lastGithubRun.created_at):null;
@@ -170,6 +171,8 @@ function renderStatus(){
 }
 function update(){
 var list=tracks();
+var hidden=(state.top10_unrevealed||[]);
+$("top10notice").hidden=!hidden.length;
 renderStatus();
 $("error").hidden=!state.last_error;$("error").textContent=state.last_error||"";
 var count=state.forecast_meta&&Number(state.forecast_meta.observations)||0;
@@ -213,6 +216,7 @@ if(fingerprint!==lastEventsFingerprint){
   row.append(elt("div","micro","Status: "+(e.status||"Gezien")));
   if(e.suggested_letter)row.append(elt("div","proposal","Onbevestigd voorstel: "+e.suggested_letter));
   if(e.transcript)row.append(elt("div","transcript",e.transcript));
+  if(e.evidence && !e.suggested_letter)row.append(elt("div","audiotip","Opname/letter: "+e.evidence));
   var clip=e.audio;
   if(clip && Number.isSafeInteger(clip.run_id) && Number.isSafeInteger(clip.artifact_id)){
    var actions=elt("div","audioactions");
@@ -239,7 +243,10 @@ if(fingerprint!==lastEventsFingerprint){
    });
    actions.append(choose);actions.append(input);
    row.append(actions);row.append(player);
-   row.append(elt("div","audiotip","Fragment ongeveer "+(clip.duration_max_seconds||115)+" seconden. GitHub-login nodig voor downloaden; de link vervalt na maximaal "+(clip.retention_days||3)+" dagen."));
+   var available=Object.keys(clip.files||{na:clip.filename||"bestand"}).map(function(k){return k==="voor"?"vóór het nummer":k==="na"?"ná het nummer":k}).join(" en ");
+   row.append(elt("div","audiotip","Beschikbaar: "+available+
+    " (max. "+(clip.duration_max_seconds||160)+" sec. per fragment). Download ZIP, pak MP3's uit en kies een bestand om te beluisteren. "+
+    "GitHub-login nodig; download vervalt na maximaal "+(clip.retention_days||3)+" dagen."));
   }else{
    row.append(elt("div","audiotip","Geen terugluisterfragment beschikbaar; deze uitzending werd niet op tijd opgenomen."));
   }
