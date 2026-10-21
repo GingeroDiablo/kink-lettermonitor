@@ -56,12 +56,28 @@ jobs:
           fi
           command -v ffmpeg
           ffmpeg -hide_banner -version | head -n 1
+      - name: Verify live radio feed and select working stream
+        shell: bash
+        timeout-minutes: 2
+        run: |
+          set -u
+          echo "KINK_STREAM_OK=false" >> "$GITHUB_ENV"
+          for candidate in             "https://playerservices.streamtheworld.com/api/livestream-redirect/KINKAAC.aac"             "https://playerservices.streamtheworld.com/api/livestream-redirect/KINK.mp3"             "https://29043.live.streamtheworld.com/KINKAAC.aac"; do
+            rm -f /tmp/kink-probe.wav
+            if timeout 22s ffmpeg -nostdin -hide_banner -loglevel error -y               -rw_timeout 9000000 -i "$candidate" -t 4               -vn -ac 1 -ar 8000 -c:a pcm_s16le /tmp/kink-probe.wav               >/dev/null 2>&1 && [ -s /tmp/kink-probe.wav ]               && [ "$(stat -c %s /tmp/kink-probe.wav)" -gt 15000 ]; then
+              echo "STREAM_URL=$candidate" >> "$GITHUB_ENV"
+              echo "KINK_STREAM_OK=true" >> "$GITHUB_ENV"
+              echo "KINK stream heeft audio: $candidate"
+              break
+            fi
+          done
+          if ! grep -q "^STREAM_URL=" "$GITHUB_ENV"; then
+            echo "::warning::Geen van de beschikbare KINK-streams gaf geluid; geen audio-opname mogelijk."
+          fi
       - name: Run unit tests
         run: python -m unittest discover -s tests -q
       - name: Check KINK and record nearby Metallica
         run: python monitor.py
-        env:
-          STREAM_URL: https://playerservices.streamtheworld.com/api/livestream-redirect/KINKAAC.aac
       - name: Save short listen-back MP3 as temporary GitHub artifact
         id: audio_upload
         uses: actions/upload-artifact@v4
