@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "last_checked": "2026-10-21T08:32:25.995623+02:00",
+  "last_checked": "2026-10-21T08:34:42.100184+02:00",
   "last_recording": null,
   "last_error": null,
   "now_playing": {
@@ -718,5 +718,17 @@
     "pace_minutes_per_position": 4.9,
     "last_observation": "2026-10-21T08:27:00+02:00",
     "assumption": "Werkdagen 08:00-19:00, nachtelijke herhaling niet voorspeld"
-  }
+  },
+  "top10_unrevealed": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ]
 }
