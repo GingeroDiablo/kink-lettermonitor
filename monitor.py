@@ -323,7 +323,7 @@ def record(state, rank, rankmap):
         state["last_recording"] = now().isoformat()
         if not detected:
             log.info("Binnen opnamevenster geen Metallica-uitzending gedetecteerd")
-            return
+            return False
 
         # Always associate the recording with a playlist event, even if the
         # next song has not yet appeared and the post-song clip is impossible.
@@ -337,8 +337,9 @@ def record(state, rank, rankmap):
                           if e["started_at"] == detected["started_at"]
                           and normalized(e["title"]) == normalized(detected["title"])), None)
         if event is None:
-            log.warning("Opname aanwezig, geen bijbehorende playlistwaarneming")
-            return
+            state["last_error"] = "Geluid opgenomen maar uitzending niet gekoppeld aan playlist"
+            log.warning(state["last_error"])
+            return False
 
         begin_offset = (started.astimezone(UTC) - origin).total_seconds()
         end_offset = ((ended.astimezone(UTC) - origin).total_seconds()
@@ -347,7 +348,8 @@ def record(state, rank, rankmap):
         if not clips:
             event["status"] = "OPNAME ONVOLLEDIG"
             event["evidence"] = "Geen bruikbaar audiofragment rond begin of einde"
-            return
+            state["last_error"] = event["evidence"]
+            return False
         try:
             text, suggestion, issue = recognize_clips(clips)
         except Exception as exc:
@@ -360,6 +362,7 @@ def record(state, rank, rankmap):
         log.info("Metallica %s: %s (voor/na: %s)",
                  event["title"], suggestion or "geen bevestigde letter",
                  ",".join(clips))
+        return True
 
 def main():
     prior = load()
@@ -381,8 +384,11 @@ def main():
         state["last_error"] = None
         if target is not None:
             state["status"] = "Opname gestart rond Metallica #" + str(target)
-            record(state, target, rankmap)
-            state["status"] = "Opname afgerond; letters zelf verifiëren"
+            captured = record(state, target, rankmap)
+            if captured:
+                state["status"] = "Audiofragmenten gemaakt; codeletter zelf controleren"
+            elif not state.get("last_error"):
+                state["status"] = "Luistervenster voltooid; geen nieuw fragment"
     except Exception as exc:
         log.exception("Monitorcontrole mislukt")
         state["last_error"] = str(exc)[:300]
