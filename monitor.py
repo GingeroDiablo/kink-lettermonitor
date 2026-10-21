@@ -197,6 +197,11 @@ def pick_target(state, rankmap, played):
         if x:
             last_rank = x
             break
+    # At the end of the final broadcast day, published ranks can run out
+    # altogether. Continue listening for any new Metallica title.
+    if (state.get("top10_unrevealed") and t.year == 2026 and t.month == 10
+            and t.day == 30 and 15 <= t.hour < 19):
+        return 0
     if not last_rank:
         return None
     # Don't presume the secret top 10 contains zero Metallica titles.
