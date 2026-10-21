@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "last_checked": "2026-10-21T12:58:32.624241+02:00",
+  "last_checked": "2026-10-21T13:28:21.426740+02:00",
   "last_recording": null,
   "last_error": null,
   "now_playing": {
-    "artist": "Talk Talk",
-    "title": "Living In Another World",
-    "started_at": "2026-10-21T12:53:00+02:00"
+    "artist": "Vices, The",
+    "title": "Gold",
+    "started_at": "2026-10-21T13:25:00+02:00"
   },
   "status": "KINK gedraaid gecontroleerd; wacht op Metallica",
   "tracks": [
@@ -26,8 +26,8 @@
       "title": "Turn The Page",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-23T08:40+02:00",
-        "window_start": "2026-10-22T12:32+02:00",
+        "estimated_at": "2026-10-23T08:46+02:00",
+        "window_start": "2026-10-22T12:44+02:00",
         "window_end": "2026-10-23T15:48+02:00",
         "confidence": "ruwe indicatie"
       }
@@ -37,8 +37,8 @@
       "title": "Until it Sleeps",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-23T14:13+02:00",
-        "window_start": "2026-10-22T16:35+02:00",
+        "estimated_at": "2026-10-23T14:19+02:00",
+        "window_start": "2026-10-22T16:46+02:00",
         "window_end": "2026-10-26T11:51+01:00",
         "confidence": "ruwe indicatie"
       }
@@ -48,9 +48,9 @@
       "title": "The Memory Remains",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-23T17:59+02:00",
-        "window_start": "2026-10-23T08:19+02:00",
-        "window_end": "2026-10-26T16:38+01:00",
+        "estimated_at": "2026-10-23T18:04+02:00",
+        "window_start": "2026-10-23T08:31+02:00",
+        "window_end": "2026-10-26T16:37+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -59,9 +59,9 @@
       "title": "Whiskey in the Jar",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-26T11:45+01:00",
-        "window_start": "2026-10-23T11:48+02:00",
-        "window_end": "2026-10-27T11:43+01:00",
+        "estimated_at": "2026-10-26T11:50+01:00",
+        "window_start": "2026-10-23T11:59+02:00",
+        "window_end": "2026-10-27T11:42+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -70,9 +70,9 @@
       "title": "The Unforgiven",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-26T15:07+01:00",
-        "window_start": "2026-10-23T14:15+02:00",
-        "window_end": "2026-10-27T16:00+01:00",
+        "estimated_at": "2026-10-26T15:13+01:00",
+        "window_start": "2026-10-23T14:26+02:00",
+        "window_end": "2026-10-27T15:59+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -81,9 +81,9 @@
       "title": "Sad But True",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-28T15:11+01:00",
-        "window_start": "2026-10-27T12:11+01:00",
-        "window_end": "2026-10-29T18:11+01:00",
+        "estimated_at": "2026-10-28T15:15+01:00",
+        "window_start": "2026-10-27T12:15+01:00",
+        "window_end": "2026-10-29T18:15+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -92,9 +92,9 @@
       "title": "Fade To Black",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-29T12:30+01:00",
-        "window_start": "2026-10-28T09:30+01:00",
-        "window_end": "2026-10-30T15:30+01:00",
+        "estimated_at": "2026-10-29T12:34+01:00",
+        "window_start": "2026-10-28T09:34+01:00",
+        "window_end": "2026-10-30T15:34+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -103,8 +103,8 @@
       "title": "Nothing Else Matters",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-29T18:38+01:00",
-        "window_start": "2026-10-28T15:38+01:00",
+        "estimated_at": "2026-10-29T18:41+01:00",
+        "window_start": "2026-10-28T15:41+01:00",
         "window_end": "2026-10-30T18:59+01:00",
         "confidence": "ruwe indicatie"
       }
@@ -114,8 +114,8 @@
       "title": "Enter Sandman",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-30T16:09+01:00",
-        "window_start": "2026-10-29T13:09+01:00",
+        "estimated_at": "2026-10-30T16:11+01:00",
+        "window_start": "2026-10-29T13:11+01:00",
         "window_end": "2026-10-30T18:59+01:00",
         "confidence": "ruwe indicatie"
       }
@@ -161,21 +161,6 @@
     }
   ],
   "forecast_anchors": [
-    {
-      "started_at": "2026-10-20T14:08:00+02:00",
-      "rank": 1294,
-      "minute": 1028.0
-    },
-    {
-      "started_at": "2026-10-20T14:12:00+02:00",
-      "rank": 1293,
-      "minute": 1032.0
-    },
-    {
-      "started_at": "2026-10-20T14:17:00+02:00",
-      "rank": 1292,
-      "minute": 1037.0
-    },
     {
       "started_at": "2026-10-20T14:21:00+02:00",
       "rank": 1291,
@@ -710,13 +695,28 @@
       "started_at": "2026-10-21T12:53:00+02:00",
       "rank": 1173,
       "minute": 1613.0
+    },
+    {
+      "started_at": "2026-10-21T13:08:00+02:00",
+      "rank": 1171,
+      "minute": 1628.0
+    },
+    {
+      "started_at": "2026-10-21T13:17:00+02:00",
+      "rank": 1169,
+      "minute": 1637.0
+    },
+    {
+      "started_at": "2026-10-21T13:22:00+02:00",
+      "rank": 1168,
+      "minute": 1642.0
     }
   ],
   "forecast_meta": {
     "observations": 108,
     "calibrated": true,
     "pace_minutes_per_position": 4.6,
-    "last_observation": "2026-10-21T12:53:00+02:00",
+    "last_observation": "2026-10-21T13:22:00+02:00",
     "assumption": "Werkdagen 08:00-19:00, nachtelijke herhaling niet voorspeld"
   },
   "top10_unrevealed": [
