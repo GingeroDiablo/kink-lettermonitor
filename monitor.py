@@ -244,7 +244,7 @@ def recognize_clips(clips):
         from faster_whisper import WhisperModel
     except ImportError:
         subprocess.run(
-            ["python", "-m", "pip", "install", "-q", "faster-whisper>=1.1,<2"],
+            ["python", "-m", "pip", "install", "-q", "faster-whisper>=1.1,<2", "av<19"],
             check=True, timeout=300,
         )
         from faster_whisper import WhisperModel
