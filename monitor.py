@@ -172,10 +172,70 @@ def update_events(state, played):
             found[key]["ended_at"] = played[i + 1]["started_at"]
     state["events"].sort(key=lambda e: e["started_at"])
 
+def replay_delay_minutes(state):
+    """Infer overnight replay offset from confirmed original/replay pairs."""
+    found = {}
+    for event in state.get("events", []):
+        dt = datetime.fromisoformat(event["started_at"]).astimezone(TZ)
+        if dt.hour < 8 or dt.hour >= 19:
+            kind = "replay"
+        else:
+            kind = "original"
+        key = (normalized(event["title"]), dt.date())
+        found.setdefault(key, {}).setdefault(kind, []).append(dt)
+    intervals = []
+    for pair in found.values():
+        for original in pair.get("original", []):
+            for repeat in pair.get("replay", []):
+                delta = (repeat - original).total_seconds() / 60
+                if 600 <= delta <= 780:
+                    intervals.append(delta)
+    # Daily list begins at 08:00, replay starts around 19:00.
+    if not intervals:
+        return 660
+    return round(sorted(intervals)[len(intervals)//2])
+
+
+def upcoming_replay(state, timestamp):
+    """Select an upcoming repeated song before GitHub's next delayed run."""
+    local = timestamp.astimezone(TZ)
+    # KINK repeats the daytime list after 19:00, not a continuously
+    # advancing ranking at night. Predict from *today's* original plays.
+    if local.hour < 18 and local.hour >= 8:
+        return None
+    shift = replay_delay_minutes(state)
+    options = []
+    for event in state.get("events", []):
+        original = datetime.fromisoformat(event["started_at"]).astimezone(TZ)
+        if not 8 <= original.hour < 19 or original.date() != local.date():
+            continue
+        if event.get("rank", 0) <= 0:
+            continue
+        repeats = [
+            repeat for repeat in state.get("events", [])
+            if repeat.get("title") == event.get("title")
+            and repeat.get("replay")
+            and datetime.fromisoformat(repeat["started_at"]).astimezone(TZ).date() == local.date()
+        ]
+        # A replay already heard with no clip cannot be recovered afterwards.
+        if repeats:
+            continue
+        estimated = original + timedelta(minutes=shift)
+        seconds_to_start = (estimated - timestamp).total_seconds()
+        if -150 <= seconds_to_start <= 40 * 60:
+            options.append((abs(seconds_to_start - 16*60), event["rank"]))
+    return min(options)[1] if options else None
+
+
 def pick_target(state, rankmap, played):
     t = now()
     if not in_window(t):
         return None
+    # Check expected overnight repeats even when the current rank has moved
+    # backwards to the start of the day's list.
+    replay_target = upcoming_replay(state, t)
+    if replay_target is not None:
+        return replay_target
     last = [p for p in played if -45 <= (t - datetime.fromisoformat(p["started_at"])).total_seconds() <= 14 * 60]
     if not last:
         return None
@@ -285,14 +345,14 @@ def record(state, rank, rankmap):
                 ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-y",
                  "-reconnect", "1", "-reconnect_streamed", "1",
                  "-reconnect_delay_max", "5",
-                 "-i", STREAM_URL, "-t", "900", "-vn", "-ac", "1",
+                 "-i", STREAM_URL, "-t", "2100", "-vn", "-ac", "1",
                  "-ar", "16000", "-c:a", "pcm_s16le", str(audio)],
                 stdout=subprocess.DEVNULL, stderr=errors,
             )
             detected = None
             started = ended = None
             try:
-                deadline = time.monotonic() + 890
+                deadline = time.monotonic() + 2050
                 while time.monotonic() < deadline and process.poll() is None:
                     time.sleep(18)
                     try:
