@@ -85,7 +85,7 @@ jobs:
         if: ${{ github.event_name == 'push' }}
         timeout-minutes: 8
         run: |
-          python -m pip install -q 'faster-whisper>=1.1,<2'
+          python -m pip install -q 'faster-whisper>=1.1,<2' 'av<19'
           python - <<'PY'
           from faster_whisper import WhisperModel
           model = WhisperModel("base", device="cpu", compute_type="int8")
