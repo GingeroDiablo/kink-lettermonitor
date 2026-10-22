@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "last_checked": "2026-10-22T17:38:02.407058+02:00",
+  "last_checked": "2026-10-22T18:05:12.466823+02:00",
   "last_recording": null,
   "last_error": null,
   "now_playing": {
-    "artist": "White Lies",
-    "title": "As I Try Not To Fall Apart",
-    "started_at": "2026-10-22T17:35:00+02:00"
+    "artist": "P.O.D.",
+    "title": "Youth of the Nation",
+    "started_at": "2026-10-22T17:52:00+02:00"
   },
   "status": "KINK gedraaid gecontroleerd; wacht op Metallica",
   "tracks": [
@@ -26,9 +26,9 @@
       "title": "Turn The Page",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-23T10:11+02:00",
-        "window_start": "2026-10-23T08:14+02:00",
-        "window_end": "2026-10-23T12:09+02:00",
+        "estimated_at": "2026-10-23T10:10+02:00",
+        "window_start": "2026-10-23T08:15+02:00",
+        "window_end": "2026-10-23T12:06+02:00",
         "confidence": "op basis van uitzendtempo"
       }
     },
@@ -37,10 +37,10 @@
       "title": "Until it Sleeps",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-23T16:00+02:00",
-        "window_start": "2026-10-23T11:10+02:00",
-        "window_end": "2026-10-26T09:51+01:00",
-        "confidence": "ruwe indicatie"
+        "estimated_at": "2026-10-23T16:03+02:00",
+        "window_start": "2026-10-23T13:22+02:00",
+        "window_end": "2026-10-23T18:43+02:00",
+        "confidence": "op basis van uitzendtempo"
       }
     },
     {
@@ -48,9 +48,9 @@
       "title": "The Memory Remains",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-26T08:50+01:00",
-        "window_start": "2026-10-23T13:59+02:00",
-        "window_end": "2026-10-26T14:42+01:00",
+        "estimated_at": "2026-10-26T08:54+01:00",
+        "window_start": "2026-10-23T14:07+02:00",
+        "window_end": "2026-10-26T14:40+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -59,8 +59,8 @@
       "title": "Whiskey in the Jar",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-26T13:41+01:00",
-        "window_start": "2026-10-23T17:32+02:00",
+        "estimated_at": "2026-10-26T13:46+01:00",
+        "window_start": "2026-10-23T17:42+02:00",
         "window_end": "2026-10-27T09:51+01:00",
         "confidence": "ruwe indicatie"
       }
@@ -70,9 +70,9 @@
       "title": "The Unforgiven",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-26T17:07+01:00",
-        "window_start": "2026-10-26T09:02+01:00",
-        "window_end": "2026-10-27T14:11+01:00",
+        "estimated_at": "2026-10-26T17:13+01:00",
+        "window_start": "2026-10-26T09:13+01:00",
+        "window_end": "2026-10-27T14:12+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -81,9 +81,9 @@
       "title": "Sad But True",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-28T17:22+01:00",
-        "window_start": "2026-10-27T14:22+01:00",
-        "window_end": "2026-10-30T09:22+01:00",
+        "estimated_at": "2026-10-28T17:33+01:00",
+        "window_start": "2026-10-27T14:33+01:00",
+        "window_end": "2026-10-30T09:33+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -92,9 +92,9 @@
       "title": "Fade To Black",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-29T14:43+01:00",
-        "window_start": "2026-10-28T11:43+01:00",
-        "window_end": "2026-10-30T17:43+01:00",
+        "estimated_at": "2026-10-29T14:55+01:00",
+        "window_start": "2026-10-28T11:55+01:00",
+        "window_end": "2026-10-30T17:55+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -103,8 +103,8 @@
       "title": "Nothing Else Matters",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-30T09:50+01:00",
-        "window_start": "2026-10-28T17:50+01:00",
+        "estimated_at": "2026-10-30T10:03+01:00",
+        "window_start": "2026-10-28T18:03+01:00",
         "window_end": "2026-10-30T18:59+01:00",
         "confidence": "ruwe indicatie"
       }
@@ -114,8 +114,8 @@
       "title": "Enter Sandman",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-30T17:57+01:00",
-        "window_start": "2026-10-29T14:57+01:00",
+        "estimated_at": "2026-10-30T18:10+01:00",
+        "window_start": "2026-10-29T15:10+01:00",
         "window_end": "2026-10-30T18:59+01:00",
         "confidence": "ruwe indicatie"
       }
@@ -187,26 +187,6 @@
     }
   ],
   "forecast_anchors": [
-    {
-      "started_at": "2026-10-21T18:36:00+02:00",
-      "rank": 1103,
-      "minute": 1956.0
-    },
-    {
-      "started_at": "2026-10-21T18:41:00+02:00",
-      "rank": 1102,
-      "minute": 1961.0
-    },
-    {
-      "started_at": "2026-10-21T18:44:00+02:00",
-      "rank": 1101,
-      "minute": 1964.0
-    },
-    {
-      "started_at": "2026-10-21T18:49:00+02:00",
-      "rank": 1100,
-      "minute": 1969.0
-    },
     {
       "started_at": "2026-10-21T18:52:00+02:00",
       "rank": 1099,
@@ -736,13 +716,33 @@
       "started_at": "2026-10-22T17:35:00+02:00",
       "rank": 983,
       "minute": 2555.0
+    },
+    {
+      "started_at": "2026-10-22T17:41:00+02:00",
+      "rank": 982,
+      "minute": 2561.0
+    },
+    {
+      "started_at": "2026-10-22T17:43:00+02:00",
+      "rank": 981,
+      "minute": 2563.0
+    },
+    {
+      "started_at": "2026-10-22T17:48:00+02:00",
+      "rank": 980,
+      "minute": 2568.0
+    },
+    {
+      "started_at": "2026-10-22T17:52:00+02:00",
+      "rank": 979,
+      "minute": 2572.0
     }
   ],
   "forecast_meta": {
     "observations": 108,
     "calibrated": true,
-    "pace_minutes_per_position": 4.71,
-    "last_observation": "2026-10-22T17:35:00+02:00",
+    "pace_minutes_per_position": 4.74,
+    "last_observation": "2026-10-22T17:52:00+02:00",
     "assumption": "Werkdagen 08:00-19:00, nachtelijke herhaling niet voorspeld"
   },
   "top10_unrevealed": [
