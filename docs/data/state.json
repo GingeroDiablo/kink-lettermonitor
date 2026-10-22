@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "last_checked": "2026-10-22T03:59:37.539016+02:00",
+  "last_checked": "2026-10-22T04:58:38.732752+02:00",
   "last_recording": null,
   "last_error": null,
   "now_playing": {
-    "artist": "Evanescence",
-    "title": "Going Under",
-    "started_at": "2026-10-22T03:58:00+02:00"
+    "artist": "Weezer",
+    "title": "We Might as Well Be Strangers (ft. Wednesday)",
+    "started_at": "2026-10-22T04:55:00+02:00"
   },
   "status": "KINK gedraaid gecontroleerd; wacht op Metallica",
   "tracks": [
@@ -167,6 +167,19 @@
       "status": "Gezien; nog geen letter",
       "replay": true,
       "notification_issue": 3,
+      "notified_letter": null,
+      "suggested_letter": null,
+      "transcript": null,
+      "evidence": null
+    },
+    {
+      "rank": 194,
+      "title": "Nothing Else Matters",
+      "started_at": "2026-10-22T04:34:00+02:00",
+      "ended_at": "2026-10-22T04:41:00+02:00",
+      "status": "Gezien; nog geen letter",
+      "replay": true,
+      "notification_issue": 4,
       "notified_letter": null,
       "suggested_letter": null,
       "transcript": null,
