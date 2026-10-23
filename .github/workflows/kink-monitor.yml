@@ -53,15 +53,24 @@ jobs:
           key: kink-whisper-base-v1
       - name: Install requirements
         run: python -m pip install -q -r requirements.txt
-      - name: Install and verify audio capture tools
+      - name: Prepare FFmpeg immediately (no slow apt-get)
         shell: bash
         run: |
-          if ! command -v ffmpeg >/dev/null 2>&1; then
-            sudo apt-get update -qq
-            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg
-          fi
-          command -v ffmpeg
-          ffmpeg -hide_banner -version | head -n 1
+          set -euo pipefail
+          python -m pip install -q imageio-ffmpeg
+          mkdir -p "$RUNNER_TEMP/kink-binaries"
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import imageio_ffmpeg
+          exe = Path(imageio_ffmpeg.get_ffmpeg_exe()).resolve()
+          destination = Path(os.environ["RUNNER_TEMP"]) / "kink-binaries" / "ffmpeg"
+          destination.symlink_to(exe)
+          with open(os.environ["GITHUB_PATH"], "a") as fp:
+              fp.write(str(destination.parent) + "\n")
+          print("Bundled FFmpeg ready:", exe)
+          PY
+          "$RUNNER_TEMP/kink-binaries/ffmpeg" -hide_banner -version | head -n 1
       - name: Verify live radio feed and select working stream
         shell: bash
         timeout-minutes: 2
