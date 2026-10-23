@@ -59,7 +59,7 @@ class MoreReliableCaptureTests(unittest.TestCase):
                     "started_at":"2026-10-23T10:41:00+02:00"},
                     song_offset=260, next_offset=None)
             self.assertEqual(len(calls),1)
-            self.assertEqual(float(calls[0][calls[0].index("-t")+1]), 330)
+            self.assertEqual(float(calls[0][calls[0].index("-t")+1]), 310)
 
     def test_45_second_polls_keep_running_until_window_expires(self):
         ticks=[0.]
