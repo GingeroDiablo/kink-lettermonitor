@@ -417,6 +417,18 @@ def record(state, rank, rankmap):
         begin_offset = (started.astimezone(UTC) - origin).total_seconds()
         end_offset = ((ended.astimezone(UTC) - origin).total_seconds()
                       if ended else None)
+        # This is a measurement, not a promise: a GitHub runner cannot
+        # recover the announcer's speech from before FFmpeg actually started.
+        event["recording_started_at"] = origin.isoformat()
+        event["pre_song_recorded_seconds"] = round(max(0.0, begin_offset))
+        event["pre_song_available"] = begin_offset >= 25
+        if begin_offset < 25:
+            log.warning("Opname van %s startte %ds na de geregistreerde start "
+                        "(of met minder dan 25s voorloop); geen 'voor'-fragment",
+                        event["title"], max(0, round(-begin_offset)))
+        else:
+            log.info("Opname van %s begon circa %ds voor de track",
+                     event["title"], round(begin_offset))
         clips = create_announcement_clips(audio, event, begin_offset, end_offset)
         if not clips:
             event["status"] = "OPNAME ONVOLLEDIG"
