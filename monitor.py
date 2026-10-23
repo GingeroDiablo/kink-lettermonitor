@@ -268,8 +268,11 @@ def pick_target(state, rankmap, played):
     # Don't presume the secret top 10 contains zero Metallica titles.
     if last_rank <= 19 and state.get("top10_unrevealed"):
         return 0
+    # Arm as far as ten playlist places before Metallica. GitHub can start
+    # many minutes late, so waiting until the song itself is visible loses
+    # the presenter introduction. Early runs can time out; later runs retry.
     for track in tracks:
-        if track["rank"] < 1 or not 0 <= last_rank - track["rank"] <= 7:
+        if track["rank"] < 1 or not 0 <= last_rank - track["rank"] <= 10:
             continue
         proposals = sum(bool(e.get("suggested_letter")) for e in state["events"] if e["rank"] == track["rank"])
         if proposals >= 2:
