@@ -35,7 +35,7 @@ def run_window(duration=180, interval=45, clock=time.monotonic,
             log.info("Audio was recorded in this job; stop extra polling")
             break
         remaining = deadline - clock()
-        if remaining < interval:
+        if remaining <= interval:
             break
         sleep(interval)
     log.info("Scheduled runner completed %d checks", count)
