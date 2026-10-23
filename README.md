@@ -5,6 +5,23 @@
 > Belangrijk: dit is **best-effort**, niet een continue of gegarandeerde recorder. GitHub Actions kan geplande runs vertragen of overslaan. Het radiostation, de afspeellijst en de stream kunnen bovendien veranderen. We geven alleen **onbevestigde** lettervoorstellen; verifieer zelf je letters.
 
 
+## Aanpassing 23 oktober — langere clips en vaker controleren
+
+- Een opname bij de start van Metallica is nu maximaal circa **7 minuten**:
+  maximaal 4 minuten vóór het geregistreerde begintijdstip en tot 3 minuten
+  erna. De feitelijke opname kan korter zijn wanneer GitHub te laat begon
+  of minder audio beschikbaar is. Het bestaande fragment kan niet achteraf
+  worden verlengd.
+- GitHub Actions kan volgens de officiële documentatie slechts **eens
+  per 5 minuten** worden ingepland, en die starts kunnen vertragen.
+  Om tussendoor vaker naar Metallica te zoeken controleert de runner
+  gedurende maximaal 3 minuten **iedere 45 seconden** de afspeellijst.
+  Er zijn normaal vier controles per geplande run; als een echte opname
+  start, stopt de extra polling en rondt de recorder eerst zijn werk af.
+- Het dashboard krijgt pas na de GitHub-run nieuwe gepubliceerde
+  gegevens. De polling is geen garantie op ononderbroken opname;
+  een oude Android-telefoon kan als zelfstandige recorder betrouwbaarder zijn.
+
 ## Actuele status en gratis pushmeldingen
 
 **Dashboard:** https://gingerodiablo.github.io/kink-lettermonitor/
