@@ -1,135 +1,58 @@
 {
   "version": 2,
-  "last_checked": "2026-10-23T10:11:37.539735+02:00",
-  "last_recording": null,
+  "last_checked": "2026-10-23T10:48:46.896052+02:00",
+  "last_recording": "2026-10-23T10:48:33.128248+02:00",
   "last_error": null,
   "now_playing": {
-    "artist": "30 Seconds To Mars",
-    "title": "From Yesterday",
-    "started_at": "2026-10-23T10:08:00+02:00"
+    "artist": "PJ Harvey",
+    "title": "A Perfect Day Elise",
+    "started_at": "2026-10-23T10:29:00+02:00"
   },
-  "status": "KINK gedraaid gecontroleerd; wacht op Metallica",
+  "status": "Audiofragmenten gemaakt; codeletter zelf controleren",
   "tracks": [
     {
       "rank": 1232,
-      "title": "Wherever I May Roam",
-      "prediction": {
-        "status": "gedraaid",
-        "estimated_at": "2026-10-21T08:19:00+02:00",
-        "window_start": null,
-        "window_end": null,
-        "confidence": "bevestigde playlistwaarneming"
-      }
+      "title": "Wherever I May Roam"
     },
     {
       "rank": 937,
-      "title": "Turn The Page",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-23T10:42+02:00",
-        "window_start": "2026-10-23T09:52+02:00",
-        "window_end": "2026-10-23T11:32+02:00",
-        "confidence": "op basis van actuele uitzending"
-      }
+      "title": "Turn The Page"
     },
     {
       "rank": 862,
-      "title": "Until it Sleeps",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-23T17:01+02:00",
-        "window_start": "2026-10-23T14:41+02:00",
-        "window_end": "2026-10-26T08:21+01:00",
-        "confidence": "op basis van uitzendtempo"
-      }
+      "title": "Until it Sleeps"
     },
     {
       "rank": 811,
-      "title": "The Memory Remains",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-26T10:10+01:00",
-        "window_start": "2026-10-23T16:04+02:00",
-        "window_end": "2026-10-26T15:16+01:00",
-        "confidence": "ruwe indicatie"
-      }
+      "title": "The Memory Remains"
     },
     {
       "rank": 746,
-      "title": "Whiskey in the Jar",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-26T15:20+01:00",
-        "window_start": "2026-10-26T08:56+01:00",
-        "window_end": "2026-10-27T10:44+01:00",
-        "confidence": "ruwe indicatie"
-      }
+      "title": "Whiskey in the Jar"
     },
     {
       "rank": 700,
-      "title": "The Unforgiven",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-26T18:57+01:00",
-        "window_start": "2026-10-26T11:38+01:00",
-        "window_end": "2026-10-27T15:16+01:00",
-        "confidence": "ruwe indicatie"
-      }
+      "title": "The Unforgiven"
     },
     {
       "rank": 396,
-      "title": "Sad But True",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-29T09:09+01:00",
-        "window_start": "2026-10-27T17:46+01:00",
-        "window_end": "2026-10-30T11:33+01:00",
-        "confidence": "ruwe indicatie"
-      }
+      "title": "Sad But True"
     },
     {
       "rank": 280,
-      "title": "Fade To Black",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-29T17:41+01:00",
-        "window_start": "2026-10-28T14:41+01:00",
-        "window_end": "2026-10-30T18:59+01:00",
-        "confidence": "ruwe indicatie"
-      }
+      "title": "Fade To Black"
     },
     {
       "rank": 194,
-      "title": "Nothing Else Matters",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-30T12:54+01:00",
-        "window_start": "2026-10-29T09:54+01:00",
-        "window_end": "2026-10-30T18:59+01:00",
-        "confidence": "ruwe indicatie"
-      }
+      "title": "Nothing Else Matters"
     },
     {
       "rank": 79,
-      "title": "Enter Sandman",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-30T18:59+01:00",
-        "window_start": "2026-10-29T15:59+01:00",
-        "window_end": "2026-10-30T18:59+01:00",
-        "confidence": "ruwe indicatie (einde van de lijst)"
-      }
+      "title": "Enter Sandman"
     },
     {
       "rank": 34,
-      "title": "One",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-30T18:59+01:00",
-        "window_start": "2026-10-29T15:59+01:00",
-        "window_end": "2026-10-30T18:59+01:00",
-        "confidence": "ruwe indicatie (einde van de lijst)"
-      }
+      "title": "One"
     }
   ],
   "events": [
@@ -184,29 +107,33 @@
       "suggested_letter": null,
       "transcript": null,
       "evidence": null
+    },
+    {
+      "rank": 937,
+      "title": "Turn The Page",
+      "started_at": "2026-10-23T10:41:00+02:00",
+      "ended_at": "2026-10-23T10:47:00+02:00",
+      "status": "LETTERVOORSTEL",
+      "suggested_letter": "S",
+      "transcript": "VOOR: En als je de telekade is, gaat op 937, die ga ik nu voor je draaien. En zoals je weet, iedereen met telekade trek in de K-1500 representeert. Een letter die krijgt je van ons als met dat nummer draaien. Die letters maken bij elkaar een woord als je dat woord goed hebt. Dan maak je kans op een absoluut bijzommere reis naar last. | NA: (niets herkend)",
+      "evidence": "Onbevestigd voorstel; luister fragmenten terug",
+      "replay": false,
+      "audio": {
+        "run_id": 39925862234,
+        "artifact_id": 12488924367,
+        "filename": "kink-202610231041-937-turn-the-page-voor.mp3",
+        "files": {
+          "voor": "kink-202610231041-937-turn-the-page-voor.mp3",
+          "na": "kink-202610231041-937-turn-the-page-na.mp3"
+        },
+        "retention_days": 3,
+        "duration_max_seconds": 160
+      },
+      "notification_issue": 5,
+      "notified_letter": "S"
     }
   ],
   "forecast_anchors": [
-    {
-      "started_at": "2026-10-22T10:47:00+02:00",
-      "rank": 1065,
-      "minute": 2147.0
-    },
-    {
-      "started_at": "2026-10-22T10:51:00+02:00",
-      "rank": 1064,
-      "minute": 2151.0
-    },
-    {
-      "started_at": "2026-10-22T11:03:00+02:00",
-      "rank": 1062,
-      "minute": 2163.0
-    },
-    {
-      "started_at": "2026-10-22T11:07:00+02:00",
-      "rank": 1061,
-      "minute": 2167.0
-    },
     {
       "started_at": "2026-10-22T11:11:00+02:00",
       "rank": 1060,
@@ -736,13 +663,33 @@
       "started_at": "2026-10-23T10:02:00+02:00",
       "rank": 945,
       "minute": 2762.0
+    },
+    {
+      "started_at": "2026-10-23T10:13:00+02:00",
+      "rank": 943,
+      "minute": 2773.0
+    },
+    {
+      "started_at": "2026-10-23T10:17:00+02:00",
+      "rank": 942,
+      "minute": 2777.0
+    },
+    {
+      "started_at": "2026-10-23T10:24:00+02:00",
+      "rank": 940,
+      "minute": 2784.0
+    },
+    {
+      "started_at": "2026-10-23T10:29:00+02:00",
+      "rank": 939,
+      "minute": 2789.0
     }
   ],
   "forecast_meta": {
     "observations": 108,
     "calibrated": true,
-    "pace_minutes_per_position": 5.05,
-    "last_observation": "2026-10-23T10:02:00+02:00",
+    "pace_minutes_per_position": 5.07,
+    "last_observation": "2026-10-23T10:29:00+02:00",
     "assumption": "Werkdagen 08:00-19:00, nachtelijke herhaling niet voorspeld"
   },
   "top10_unrevealed": [
