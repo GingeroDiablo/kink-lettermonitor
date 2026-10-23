@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "last_checked": "2026-10-23T17:25:46.030598+02:00",
+  "last_checked": "2026-10-23T17:43:30.432797+02:00",
   "last_recording": "2026-10-23T16:50:32.824321+02:00",
   "last_error": null,
   "now_playing": {
-    "artist": "The Black Crowes",
-    "title": "She Talks To Angels",
-    "started_at": "2026-10-23T17:21:00+02:00"
+    "artist": "Prince and the Revolution",
+    "title": "When Doves Cry",
+    "started_at": "2026-10-23T17:37:00+02:00"
   },
   "status": "KINK gedraaid gecontroleerd; wacht op Metallica",
   "tracks": [
@@ -48,8 +48,8 @@
       "title": "The Memory Remains",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-26T09:47+01:00",
-        "window_start": "2026-10-23T18:51+02:00",
+        "estimated_at": "2026-10-26T09:48+01:00",
+        "window_start": "2026-10-23T18:52+02:00",
         "window_end": "2026-10-26T11:44+01:00",
         "confidence": "op basis van uitzendtempo"
       }
@@ -59,9 +59,9 @@
       "title": "Whiskey in the Jar",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-26T14:51+01:00",
-        "window_start": "2026-10-26T12:15+01:00",
-        "window_end": "2026-10-26T17:26+01:00",
+        "estimated_at": "2026-10-26T14:53+01:00",
+        "window_start": "2026-10-26T12:18+01:00",
+        "window_end": "2026-10-26T17:28+01:00",
         "confidence": "op basis van uitzendtempo"
       }
     },
@@ -70,9 +70,9 @@
       "title": "The Unforgiven",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-26T18:15+01:00",
-        "window_start": "2026-10-26T12:44+01:00",
-        "window_end": "2026-10-27T12:46+01:00",
+        "estimated_at": "2026-10-26T18:18+01:00",
+        "window_start": "2026-10-26T12:48+01:00",
+        "window_end": "2026-10-27T12:48+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -81,9 +81,9 @@
       "title": "Sad But True",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-28T18:28+01:00",
-        "window_start": "2026-10-27T17:53+01:00",
-        "window_end": "2026-10-30T08:04+01:00",
+        "estimated_at": "2026-10-28T18:34+01:00",
+        "window_start": "2026-10-27T17:59+01:00",
+        "window_end": "2026-10-30T08:08+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -92,9 +92,9 @@
       "title": "Fade To Black",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-29T15:48+01:00",
-        "window_start": "2026-10-28T12:53+01:00",
-        "window_end": "2026-10-30T18:43+01:00",
+        "estimated_at": "2026-10-29T15:54+01:00",
+        "window_start": "2026-10-28T13:00+01:00",
+        "window_end": "2026-10-30T18:48+01:00",
         "confidence": "ruwe indicatie"
       }
     },
@@ -103,8 +103,8 @@
       "title": "Nothing Else Matters",
       "prediction": {
         "status": "verwacht",
-        "estimated_at": "2026-10-30T10:55+01:00",
-        "window_start": "2026-10-28T18:55+01:00",
+        "estimated_at": "2026-10-30T11:02+01:00",
+        "window_start": "2026-10-29T08:02+01:00",
         "window_end": "2026-10-30T18:59+01:00",
         "confidence": "ruwe indicatie"
       }
@@ -234,11 +234,6 @@
     }
   ],
   "forecast_anchors": [
-    {
-      "started_at": "2026-10-22T18:12:00+02:00",
-      "rank": 976,
-      "minute": 2592.0
-    },
     {
       "started_at": "2026-10-22T18:17:00+02:00",
       "rank": 975,
@@ -783,13 +778,18 @@
       "started_at": "2026-10-23T17:21:00+02:00",
       "rank": 855,
       "minute": 3201.0
+    },
+    {
+      "started_at": "2026-10-23T17:26:00+02:00",
+      "rank": 854,
+      "minute": 3206.0
     }
   ],
   "forecast_meta": {
     "observations": 108,
     "calibrated": true,
-    "pace_minutes_per_position": 4.7,
-    "last_observation": "2026-10-23T17:21:00+02:00",
+    "pace_minutes_per_position": 4.71,
+    "last_observation": "2026-10-23T17:26:00+02:00",
     "assumption": "Werkdagen 08:00-19:00, nachtelijke herhaling niet voorspeld"
   },
   "top10_unrevealed": [
