@@ -78,15 +78,19 @@ def create_announcement_clips(recording, event, song_offset=None, next_offset=No
     clips = {}
     base = clip_name(event).removesuffix(".mp3")
     windows = []
+    # Give the presenter room to speak well into the song. Playlist timestamps
+    # can be approximate; the older +25s cutoff truncated real announcements.
+    # Include ~4 minutes before and ~3 minutes into Metallica if recorded.
     if song_offset is not None and song_offset >= 25:
-        windows.append(("voor", max(0, song_offset - 135), song_offset + 25))
+        windows.append(("voor", max(0, song_offset - 240), song_offset + 180))
     if next_offset is not None and next_offset >= 25:
         windows.append(("na", max(0, next_offset - 80), next_offset + 75))
     duration_estimate = (recording.stat().st_size - 78) / 32000 if recording.exists() else 0
     for label, first, last in windows:
         if duration_estimate < first + 12:
             continue
-        duration = min(160.0, last - first, duration_estimate - first)
+        duration = min(420.0 if label == "voor" else 160.0,
+                       last - first, duration_estimate - first)
         if duration < 12:
             continue
         dest = OUT / f"{base}-{label}.mp3"
@@ -110,7 +114,7 @@ def create_announcement_clips(recording, event, song_offset=None, next_offset=No
             "title": event["title"], "started_at": event["started_at"],
             "filename": Path(next(iter(clips.values()))).name,
             "files": {k: Path(v).name for k, v in clips.items()},
-            "duration_max_seconds": 160,
+            "duration_max_seconds": 420,
         }, ensure_ascii=False, indent=2), encoding="utf-8")
         log.info("Prepared %s listen-back clip(s) for %s", len(clips), event["title"])
     return clips
