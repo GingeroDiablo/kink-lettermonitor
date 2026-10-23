@@ -114,7 +114,7 @@ footer{margin-top:35px;text-align:center;font-size:12px;color:var(--muted)}
 <div id="tracks" class="empty">Hitlijst wordt geladen…</div></section>
 </div>
 <div>
-<section class="card section" style="margin-bottom:20px"><div class="sectionhead"><h2>Opnames &amp; aanwijzingen</h2><small id="eventsCount">0 waarnemingen</small></div><p class="micro" style="margin:0 0 14px">Bij nieuwe opnames verschijnt een korte, tijdelijke MP3 via GitHub (3 dagen bewaard). Download het ZIP-bestand, pak de MP3 uit en kies hier <strong>Beluister MP3</strong>. Audio staat niet openbaar op deze site.</p><div id="events" class="empty">Er zijn nog geen Metallica-nummers geregistreerd.</div></section>
+<section class="card section" style="margin-bottom:20px"><div class="sectionhead"><h2>Opnames &amp; aanwijzingen</h2><small id="eventsCount">0 waarnemingen</small></div><p class="micro" style="margin:0 0 14px">Bij nieuwe opnames verschijnen tijdelijke MP3-fragmenten via GitHub (3 dagen bewaard). Het fragment rond de start loopt waar mogelijk tot 3 minuten ná het begin van Metallica. Download het ZIP-bestand, pak de MP3 uit en kies hier <strong>Beluister MP3</strong>. Audio staat niet openbaar op deze site.</p><div id="events" class="empty">Er zijn nog geen Metallica-nummers geregistreerd.</div></section>
 <div class="footnote" style="margin-bottom:14px"><strong>Pushmeldingen bij Metallica en nieuwe lettervoorstellen:</strong> installeer de gratis GitHub-app, log in met GingeroDiablo en schakel onder Profiel → Instellingen → Configure Notifications de pushmeldingen voor <strong>Direct mentions</strong> in. Je wordt in een GitHub-issue genoemd zodra een nieuwe relevante waarneming wordt opgeslagen. <a class="link" target="_blank" rel="noopener" href="https://github.com/GingeroDiablo/kink-lettermonitor/issues">Open meldingen ↗</a></div>
 <div class="footnote">Let op: GitHub Actions wordt niet precies op tijd gestart. Bij gemiste aankondigingen kan KINKs herhaling tussen 19.00 en 08.00 uur helpen. Deze monitor is geen garantie op een volledig codewoord.</div>
 </div>
@@ -243,7 +243,7 @@ if(fingerprint!==lastEventsFingerprint){
    });
    actions.append(choose);actions.append(input);
    row.append(actions);row.append(player);
-   var available=Object.keys(clip.files||{na:clip.filename||"bestand"}).map(function(k){return k==="voor"?"vóór het nummer":k==="na"?"ná het nummer":k}).join(" en ");
+   var available=Object.keys(clip.files||{na:clip.filename||"bestand"}).map(function(k){return k==="voor"?"rond de start (ook ná het begin)":k==="na"?"rond het einde":k}).join(" en ");
    row.append(elt("div","audiotip","Beschikbaar: "+available+
     " (max. "+(clip.duration_max_seconds||160)+" sec. per fragment). Download ZIP, pak MP3's uit en kies een bestand om te beluisteren. "+
     "GitHub-login nodig; download vervalt na maximaal "+(clip.retention_days||3)+" dagen."));
