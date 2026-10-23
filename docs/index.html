@@ -284,6 +284,16 @@ if(fingerprint!==lastEventsFingerprint){
   if(e.suggested_letter)row.append(elt("div","proposal","Onbevestigd voorstel: "+e.suggested_letter));
   if(e.transcript)row.append(elt("div","transcript",e.transcript));
   if(e.evidence && !e.suggested_letter)row.append(elt("div","audiotip","Opname/letter: "+e.evidence));
+  // Show the measured lead time, not an implied complete pre-song recording.
+  if(Number.isFinite(e.pre_song_recorded_seconds)){
+   var seconds=e.pre_song_recorded_seconds;
+   var label=seconds<25
+    ?"Recorder begon te laat voor een fragment vóór Metallica."
+    :seconds<180
+     ?"Beperkte aanloop: "+seconds+" seconden vóór Metallica opgenomen."
+     :"Aanloop opgenomen: circa "+Math.round(seconds/60)+" minuten vóór Metallica.";
+   row.append(elt("div","audiotip",label));
+  }
   var clip=e.audio;
   if(clip && Number.isSafeInteger(clip.run_id) && Number.isSafeInteger(clip.artifact_id)){
    var actions=elt("div","audioactions");
