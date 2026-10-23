@@ -13,6 +13,7 @@ on:
       - 'forecast.py'
       - 'persist_state.py'
       - 'audio_clips.py'
+      - 'poll_monitor.py'
   workflow_dispatch:
   schedule:
     # Twee verschoven tijdreeksen (elk 10 min, samen iedere 5 min).
@@ -31,7 +32,7 @@ concurrency:
 jobs:
   watch:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 50
     outputs:
       changed: ${{ steps.persist.outputs.changed }}
     steps:
@@ -98,8 +99,11 @@ jobs:
               list(segments)
               print("Real KINK sample decoded and processed by Whisper")
           PY
-      - name: Check KINK and record nearby Metallica
-        run: python monitor.py
+      - name: Poll KINK every 45 seconds while scheduled job is running
+        run: python poll_monitor.py
+        env:
+          POLL_WINDOW_SECONDS: ${{ github.event_name == 'schedule' && '180' || '0' }}
+          POLL_INTERVAL_SECONDS: '45'
       - name: Save short listen-back MP3 as temporary GitHub artifact
         id: audio_upload
         uses: actions/upload-artifact@v4
