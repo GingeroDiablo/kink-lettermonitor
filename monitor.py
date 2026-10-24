@@ -14,7 +14,7 @@ from zoneinfo import ZoneInfo
 
 import requests
 from bs4 import BeautifulSoup
-from forecast import update_forecasts
+from forecast import update_forecasts, is_original_airtime
 from audio_clips import create_announcement_clips
 
 ROOT = Path(__file__).resolve().parent
@@ -165,9 +165,12 @@ def update_events(state, played):
             event = {"rank": rank, "title": p["title"], "started_at": p["started_at"],
                      "ended_at": None, "status": "Gezien; nog geen letter",
                      "suggested_letter": None, "transcript": None, "evidence": None,
-                     "replay": dt.hour >= 19 or dt.hour < 8}
+                     "replay": not is_original_airtime(dt)
             state["events"].append(event)
             found[key] = event
+        # Re-evaluate older stored observations using the actual weekend
+        # countdown schedule; 06:00–08:00 on Sat/Sun is NOT a replay.
+        found[key]["replay"] = not is_original_airtime(dt)
         if i + 1 < len(played):
             found[key]["ended_at"] = played[i + 1]["started_at"]
     state["events"].sort(key=lambda e: e["started_at"])
@@ -177,11 +180,12 @@ def replay_delay_minutes(state):
     found = {}
     for event in state.get("events", []):
         dt = datetime.fromisoformat(event["started_at"]).astimezone(TZ)
-        if dt.hour < 8 or dt.hour >= 19:
-            kind = "replay"
-        else:
-            kind = "original"
-        key = (normalized(event["title"]), dt.date())
+        kind = "original" if is_original_airtime(dt) else "replay"
+        # Night repeats after midnight refer to the preceding broadcast day.
+        broadcast_day = (dt - timedelta(days=1)).date() if (
+            kind == "replay" and dt.hour < 6
+        ) else dt.date()
+        key = (normalized(event["title"]), broadcast_day)
         found.setdefault(key, {}).setdefault(kind, []).append(dt)
     intervals = []
     for pair in found.values():
@@ -190,7 +194,7 @@ def replay_delay_minutes(state):
                 delta = (repeat - original).total_seconds() / 60
                 if 600 <= delta <= 780:
                     intervals.append(delta)
-    # Daily list begins at 08:00, replay starts around 19:00.
+    # Fallback across the variable weekend/weekday repeat schedule.
     if not intervals:
         return 660
     return round(sorted(intervals)[len(intervals)//2])
@@ -201,14 +205,14 @@ def upcoming_replay(state, timestamp):
     local = timestamp.astimezone(TZ)
     # KINK repeats the daytime list after 19:00, not a continuously
     # advancing ranking at night. Predict from *today's* original plays.
-    if 8 <= local.hour < 18:
+    if is_original_airtime(local):
         return None
-    broadcast_date = (local - timedelta(days=1)).date() if local.hour < 8 else local.date()
+    broadcast_date = (local - timedelta(days=1)).date() if local.hour < 6 else local.date()
     shift = replay_delay_minutes(state)
     options = []
     for event in state.get("events", []):
         original = datetime.fromisoformat(event["started_at"]).astimezone(TZ)
-        if not 8 <= original.hour < 19 or original.date() != broadcast_date:
+        if not is_original_airtime(original) or original.date() != broadcast_date:
             continue
         if event.get("rank", 0) <= 0:
             continue
