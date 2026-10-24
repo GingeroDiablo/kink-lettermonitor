@@ -32,6 +32,11 @@ for day in DAYS:
 DEFAULT_PACE = TOTAL_MINUTES / 1500
 
 
+def norm(s):
+    value = unicodedata.normalize("NFKD", str(s)).encode("ascii", "ignore").decode().casefold()
+    return re.sub(r"[^a-z0-9]+", " ", value).strip()
+
+
 def is_original_airtime(moment):
     """Whether a local timestamp belongs to a new ranked countdown slot."""
     return to_broadcast_minute(moment) is not None
