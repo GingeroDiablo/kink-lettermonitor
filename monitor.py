@@ -165,7 +165,7 @@ def update_events(state, played):
             event = {"rank": rank, "title": p["title"], "started_at": p["started_at"],
                      "ended_at": None, "status": "Gezien; nog geen letter",
                      "suggested_letter": None, "transcript": None, "evidence": None,
-                     "replay": not is_original_airtime(dt)
+                     "replay": not is_original_airtime(dt)}
             state["events"].append(event)
             found[key] = event
         # Re-evaluate older stored observations using the actual weekend
