@@ -53,24 +53,20 @@ jobs:
           key: kink-whisper-base-v1
       - name: Install requirements
         run: python -m pip install -q -r requirements.txt
-      - name: Prepare FFmpeg immediately (no slow apt-get)
+      - name: Install stable Ubuntu FFmpeg (avoid imageio binary crash)
         shell: bash
+        timeout-minutes: 5
         run: |
           set -euo pipefail
-          python -m pip install -q imageio-ffmpeg
-          mkdir -p "$RUNNER_TEMP/kink-binaries"
-          python - <<'PY'
-          import os
-          from pathlib import Path
-          import imageio_ffmpeg
-          exe = Path(imageio_ffmpeg.get_ffmpeg_exe()).resolve()
-          destination = Path(os.environ["RUNNER_TEMP"]) / "kink-binaries" / "ffmpeg"
-          destination.symlink_to(exe)
-          with open(os.environ["GITHUB_PATH"], "a") as fp:
-              fp.write(str(destination.parent) + "\n")
-          print("Bundled FFmpeg ready:", exe)
-          PY
-          "$RUNNER_TEMP/kink-binaries/ffmpeg" -hide_banner -version | head -n 1
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq ffmpeg
+          command -v ffmpeg
+          ffmpeg -hide_banner -version | head -n 1
+          # Verify both decoding and encoding rather than merely --version.
+          ffmpeg -nostdin -hide_banner -loglevel error -y \
+            -f lavfi -i sine=frequency=440:sample_rate=16000:duration=1 \
+            -ac 1 -ar 16000 -c:a pcm_s16le /tmp/kink-ffmpeg-selftest.wav
+          test "$(stat -c %s /tmp/kink-ffmpeg-selftest.wav)" -gt 25000
       - name: Verify live radio feed and select working stream
         shell: bash
         timeout-minutes: 2
@@ -87,7 +83,8 @@ jobs:
             fi
           done
           if ! grep -q "^STREAM_URL=" "$GITHUB_ENV"; then
-            echo "::warning::Geen van de beschikbare KINK-streams gaf geluid; geen audio-opname mogelijk."
+            echo "::error::Geen KINK-stream met audio gevonden. Opname mislukt; workflow mag NIET groen worden."
+            exit 1
           fi
       - name: Run unit tests
         run: python -m unittest discover -s tests -q
