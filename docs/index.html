@@ -117,7 +117,7 @@ footer{margin-top:35px;text-align:center;font-size:12px;color:var(--muted)}
 </section>
 <section class="card section"><div class="sectionhead"><h2>Metallica in de KINK 1500</h2><small>Handmatig bevestigen ↓</small></div>
 <div class="forecast-info" id="top10notice" hidden>De top 10 is nog niet volledig bekend. Er kan extra Metallica tussen staan. De monitor bewaakt ook onbekende titels en toont deze voorlopig met positie #?.</div>
-<div class="forecast-info" id="forecastinfo"><strong>Verwachte uitzendtijden</strong> · schattingen voor 08.00–19.00 uur op werkdagen. De echte tijden kunnen afwijken; herhalingen zijn niet ingepland.</div>
+<div class="forecast-info" id="forecastinfo"><strong>Verwachte uitzendtijden</strong> · de KINK 1500 telt ook door op zaterdag 24 en zondag 25 oktober (06.00–18.00 uur); op werkdagen schatten we 08.00–19.00 uur. Herhalingen tellen niet als nieuwe lijstposities.</div>
 <div id="tracks" class="empty">Hitlijst wordt geladen…</div>
 <div id="secret-reserve" class="reserve" hidden>
  <div class="reserve-title">Geheime top 10 · mogelijke extra Metallica-nummers</div>
@@ -243,7 +243,7 @@ renderStatus();
 renderReserve();
 $("error").hidden=!state.last_error;$("error").textContent=state.last_error||"";
 var count=state.forecast_meta&&Number(state.forecast_meta.observations)||0;
-$("forecastinfo").textContent="Geschatte uitzending overdag (ma–vr 08.00–19.00); "+
+$("forecastinfo").textContent="Geschatte uitzending overdag (ma–vr 08.00–19.00, za–zo 06.00–18.00; alle 12 dagen); "+
   (count===0?"nog niet op actuele speeltijden afgestemd.":("afgestemd op "+count+" herkende lijstposities."))+
   " Tijden en marges zijn indicatief. De nachtelijke herhaling heeft geen vaste voorspelling.";
 $("total").textContent=list.length;
