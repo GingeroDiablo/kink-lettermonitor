@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "last_checked": "2026-10-24T02:11:11.462328+02:00",
+  "last_checked": "2026-10-24T02:53:31.869707+02:00",
   "last_recording": "2026-10-23T16:50:32.824321+02:00",
   "last_error": "Geen geluid uit KINK-stream ontvangen: ",
   "now_playing": {
-    "artist": "Ben Howard",
-    "title": "Keep Your Head Up",
-    "started_at": "2026-10-24T02:06:00+02:00"
+    "artist": "Metallica",
+    "title": "Until it Sleeps",
+    "started_at": "2026-10-24T02:50:00+02:00"
   },
   "status": "Controlefout",
   "tracks": [
@@ -163,6 +163,18 @@
       "status": "Gezien; nog geen letter",
       "replay": true,
       "notification_issue": 7,
+      "notified_letter": null,
+      "suggested_letter": null,
+      "transcript": null,
+      "evidence": null
+    },
+    {
+      "rank": 862,
+      "title": "Until it Sleeps",
+      "started_at": "2026-10-24T02:50:00+02:00",
+      "status": "Gezien; nog geen letter",
+      "replay": true,
+      "notification_issue": 8,
       "notified_letter": null,
       "suggested_letter": null,
       "transcript": null,
