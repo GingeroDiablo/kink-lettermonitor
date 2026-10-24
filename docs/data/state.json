@@ -1,14 +1,14 @@
 {
   "version": 2,
-  "last_checked": "2026-10-24T20:32:49.229212+02:00",
-  "last_recording": "2026-10-24T20:32:49.224769+02:00",
+  "last_checked": "2026-10-24T20:50:41.547429+02:00",
+  "last_recording": "2026-10-24T20:50:29.600230+02:00",
   "last_error": null,
   "now_playing": {
-    "artist": "The Offspring",
-    "title": "Pretty Fly (For A White Guy)",
-    "started_at": "2026-10-24T19:53:00+02:00"
+    "artist": "The Charlatans",
+    "title": "The Only One I Know",
+    "started_at": "2026-10-24T20:31:00+02:00"
   },
-  "status": "Luistervenster voltooid; geen nieuw fragment",
+  "status": "Audiofragmenten gemaakt; codeletter zelf controleren",
   "tracks": [
     {
       "rank": 1232,
@@ -234,6 +234,33 @@
       },
       "notification_issue": 10,
       "notified_letter": "E"
+    },
+    {
+      "rank": 811,
+      "title": "The Memory Remains",
+      "started_at": "2026-10-24T20:45:00+02:00",
+      "ended_at": "2026-10-24T20:49:00+02:00",
+      "status": "LETTERVOORSTEL",
+      "suggested_letter": "S",
+      "transcript": "VOOR: De laatste in een party in een feminine urd. King stuurt je tijd als roktober in de King 1500. Naar het meest in drukken, weken de concert van je leven, Metallica. Jij hoort het goed jij maar kans op tikkes voor Metallica in een vegus, baby. Bij ieder Metallica nummer in de King 1500 staat een aparte letter. Als je alle Metallica nummers hebt gehoord en dus alle letters kun jij een word formen. Stuur dat word in via het formulier op kink.nl en jij maakt kans op die tickets. Let op. Op nummer 8-100-elf staat de Memory Remains. Bij dat nummer hoort de letter er van de Rotterdam en van de radio, waar je nu naar luistert. Nogmaals met Teleka met de Memory Remains en daarbij hoort de letter er er. | NA: (niets herkend)",
+      "evidence": "Onbevestigd voorstel; luister fragmenten terug",
+      "replay": true,
+      "recording_started_at": "2026-10-24T18:33:39.579936+00:00",
+      "pre_song_recorded_seconds": 680,
+      "pre_song_available": true,
+      "audio": {
+        "run_id": 40120414971,
+        "artifact_id": 12571392831,
+        "filename": "kink-202610242045-811-the-memory-remains-voor.mp3",
+        "files": {
+          "voor": "kink-202610242045-811-the-memory-remains-voor.mp3",
+          "na": "kink-202610242045-811-the-memory-remains-na.mp3"
+        },
+        "retention_days": 3,
+        "duration_max_seconds": 420
+      },
+      "notification_issue": 11,
+      "notified_letter": "S"
     }
   ],
   "forecast_anchors": [
