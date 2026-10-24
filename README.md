@@ -1,6 +1,17 @@
 # KINK 1500 Metallica Lettermonitor — volledig gratis op GitHub
 
-**Voor de KINK-actie 19 t/m 30 oktober 2026.** Deze versie vereist **geen eigen server, NAS, Docker, AI-API-sleutel of creditcard**. De code is een hobbyproject, onafhankelijk van KINK of Metallica.
+**Voor de KINK-actie 19 t/m 30 oktober 2026.**
+
+## Weekenduitzendingen en voorspellingen (24–25 oktober)
+
+De **twaalf** kalenderdagen tellen allemaal mee, dus ook zaterdag 24 en zondag 25 oktober 2026. De originele lijst is in de officiële weekendprogrammering van KINK te horen van **06:00 tot 18:00**. Voor werkdagen gebruikt het model KINKs aangekondigde uitzendvenster **08:00–19:00**. De avondsessies en nachtuitzendingen zijn herhalingen en schuiven de originele aftelling niet verder.
+
+- Voorspelde tijdstippen worden uit actuele afspeellijstwaarnemingen herberekend; het blijven schattingen.
+- Ook de monitor onderscheidt weekendnummers van herhalingen; zaterdag en zondag 06:00–08:00 worden niet langer foutief als herhaling gelabeld.
+- Op zondag 25 oktober gaat de klok naar wintertijd; de tijdrekening gebruikt `Europe/Amsterdam`.
+- Bron: [KINK officiële programmering week 43](https://kink.nl/programmering/kink/2026/43).
+
+ Deze versie vereist **geen eigen server, NAS, Docker, AI-API-sleutel of creditcard**. De code is een hobbyproject, onafhankelijk van KINK of Metallica.
 
 > Belangrijk: dit is **best-effort**, niet een continue of gegarandeerde recorder. GitHub Actions kan geplande runs vertragen of overslaan. Het radiostation, de afspeellijst en de stream kunnen bovendien veranderen. We geven alleen **onbevestigde** lettervoorstellen; verifieer zelf je letters.
 
