@@ -1,10 +1,11 @@
 """KINK 1500 original daytime airtime forecast.
 
-The contest airs on weekdays 08:00–19:00 Europe/Amsterdam between
-19 and 30 October 2026. Overnight repeats are deliberately NOT treated
-as evidence of the main list's progress.
+The countdown runs on all 12 calendar days, 19–30 October 2026.
+Weekday daytime is modelled at 08:00–19:00 (KINK's announced hours).
+The published radio schedule lists weekend originals 06:00–18:00;
+the evening/night programme repeats are not new ranking progress.
 
-All projected times are estimates, not a published KINK timetable.
+All projected times are estimates, not a published per-song timetable.
 """
 from datetime import datetime, timedelta
 from statistics import median
@@ -14,43 +15,56 @@ import unicodedata
 import re
 
 TZ = ZoneInfo("Europe/Amsterdam")
-DAY_MINUTES = 11 * 60
 START = datetime(2026, 10, 19, 8, tzinfo=TZ)
 END = datetime(2026, 10, 30, 19, tzinfo=TZ)
-DAYS = [
-    (START + timedelta(days=i)).date()
-    for i in range(12)
-    if (START + timedelta(days=i)).weekday() < 5
-]
-TOTAL_MINUTES = len(DAYS) * DAY_MINUTES
+DAYS = [(START + timedelta(days=i)).date() for i in range(12)]
+
+# All 12 days advance the countdown. Published weekend programming starts at
+# 06:00 and repeats from 18:00; weekdays keep the advertised 08:00–19:00
+# estimate. Keep the local timezone to handle the 25 October DST change.
+DAY_HOURS = {day: ((6, 18) if day.weekday() >= 5 else (8, 19)) for day in DAYS}
+DAY_OFFSETS = {}
+TOTAL_MINUTES = 0
+for day in DAYS:
+    DAY_OFFSETS[day] = TOTAL_MINUTES
+    opening, closing = DAY_HOURS[day]
+    TOTAL_MINUTES += (closing - opening) * 60
 DEFAULT_PACE = TOTAL_MINUTES / 1500
 
 
-def norm(s):
-    value = unicodedata.normalize("NFKD", str(s)).encode("ascii", "ignore").decode().casefold()
-    return re.sub(r"[^a-z0-9]+", " ", value).strip()
+def is_original_airtime(moment):
+    """Whether a local timestamp belongs to a new ranked countdown slot."""
+    return to_broadcast_minute(moment) is not None
 
 
 def to_broadcast_minute(moment):
-    """Map live daytime airtimes onto a continuous 10 x 11-hour timeline."""
+    """Convert a daytime airing to the continuous 12-day countdown axis."""
     if isinstance(moment, str):
         moment = datetime.fromisoformat(moment)
     if moment.tzinfo is None:
         return None
     local = moment.astimezone(TZ)
-    if local.date() not in DAYS or not 8 <= local.hour < 19:
+    day = local.date()
+    if day not in DAY_HOURS:
         return None
-    day = DAYS.index(local.date())
-    return day * DAY_MINUTES + (local.hour - 8) * 60 + local.minute + local.second / 60
+    opening, closing = DAY_HOURS[day]
+    if not opening <= local.hour < closing:
+        return None
+    return (DAY_OFFSETS[day] + (local.hour - opening) * 60
+            + local.minute + local.second / 60)
 
 
 def from_broadcast_minute(value):
-    # Never return a weekend, overnight hour or date after the contest.
+    """Convert countdown progress back to a day/time, including the weekend."""
     minute = max(0.0, min(TOTAL_MINUTES - 0.01, float(value)))
-    day = min(int(minute // DAY_MINUTES), len(DAYS) - 1)
-    offset = minute - day * DAY_MINUTES
-    return (datetime.combine(DAYS[day], datetime.min.time(), tzinfo=TZ)
-            + timedelta(hours=8, minutes=offset)).isoformat(timespec="minutes")
+    for day in DAYS:
+        opening, closing = DAY_HOURS[day]
+        duration = (closing - opening) * 60
+        if minute < DAY_OFFSETS[day] + duration:
+            return (datetime.combine(day, datetime.min.time(), tzinfo=TZ)
+                    + timedelta(hours=opening, minutes=minute - DAY_OFFSETS[day])
+                    ).isoformat(timespec="minutes")
+    raise AssertionError("All broadcast minutes must map to a scheduled day")
 
 
 def sample_anchors(state, rankmap, played):
@@ -109,7 +123,7 @@ def update_forecasts(state, rankmap, played):
         "calibrated": calibrated,
         "pace_minutes_per_position": round(pace, 2),
         "last_observation": last["started_at"] if last else None,
-        "assumption": "Werkdagen 08:00-19:00, nachtelijke herhaling niet voorspeld",
+        "assumption": "Alle 12 dagen; ma-vr 08:00-19:00, za-zo 06:00-18:00; herhalingen uitgesloten",
     }
 
     original_events = {}
