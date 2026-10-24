@@ -36,6 +36,25 @@ class KinkTests(unittest.TestCase):
         self.assertEqual(monitor.letter_from_text("De letter is B en de letter is Q"), None)
         self.assertIsNone(monitor.letter_from_text("Het woord letter kwam voorbij"))
 
+    def test_weekend_original_and_replay_classification(self):
+        rankmap = {850: {"artist": "Metallica", "title": "One"}}
+        state = {"tracks": [{"rank": 850, "title": "One"}], "events": []}
+        plays = [
+            {"started_at": "2026-10-24T07:10:00+02:00",
+             "artist": "Metallica", "title": "One"},
+            {"started_at": "2026-10-24T20:10:00+02:00",
+             "artist": "Metallica", "title": "One"},
+        ]
+        monitor.update_events(state, plays)
+        self.assertEqual(len(state["events"]), 2)
+        self.assertFalse(state["events"][0]["replay"])
+        self.assertTrue(state["events"][1]["replay"])
+
+    def test_weekend_replay_forecast_not_armed_during_original(self):
+        t = datetime(2026, 10, 25, 7, 15,
+                     tzinfo=ZoneInfo("Europe/Amsterdam"))
+        self.assertIsNone(monitor.upcoming_replay({"events": []}, t))
+
     def test_contest_window(self):
         tz = ZoneInfo("Europe/Amsterdam")
         self.assertTrue(monitor.in_window(datetime(2026, 10, 19, 20, tzinfo=tz)))
