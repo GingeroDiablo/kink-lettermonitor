@@ -8,18 +8,32 @@ TZ = ZoneInfo("Europe/Amsterdam")
 
 
 class ForecastTests(unittest.TestCase):
-    def test_ten_weekdays_and_no_night_or_weekend(self):
-        self.assertEqual(len(forecast.DAYS), 10)
-        self.assertEqual(forecast.TOTAL_MINUTES, 6600)
+    def test_twelve_days_with_weekend_and_dst_transition(self):
+        self.assertEqual(len(forecast.DAYS), 12)
+        self.assertEqual(forecast.TOTAL_MINUTES, 8040)
         self.assertEqual(forecast.to_broadcast_minute("2026-10-19T21:15:00+02:00"), None)
-        self.assertEqual(forecast.to_broadcast_minute("2026-10-24T10:15:00+02:00"), None)
         self.assertEqual(forecast.to_broadcast_minute("2026-10-20T08:00:00+02:00"), 660)
-        self.assertEqual(forecast.to_broadcast_minute("2026-10-26T08:00:00+01:00"), 3300)
+        self.assertEqual(forecast.to_broadcast_minute("2026-10-24T06:00:00+02:00"), 3300)
+        self.assertEqual(forecast.to_broadcast_minute("2026-10-24T10:15:00+02:00"), 3555)
+        self.assertEqual(forecast.to_broadcast_minute("2026-10-24T18:15:00+02:00"), None)
+        self.assertEqual(forecast.to_broadcast_minute("2026-10-25T06:00:00+01:00"), 4020)
+        self.assertEqual(forecast.to_broadcast_minute("2026-10-25T08:00:00+01:00"), 4140)
+        self.assertEqual(forecast.to_broadcast_minute("2026-10-26T08:00:00+01:00"), 4740)
 
-    def test_scheduled_times_skip_weekend_and_night(self):
+    def test_scheduled_times_include_weekend_but_exclude_replays(self):
         self.assertEqual(forecast.from_broadcast_minute(660)[:16], "2026-10-20T08:00")
-        self.assertEqual(forecast.from_broadcast_minute(3300)[:16], "2026-10-26T08:00")
-        self.assertEqual(forecast.from_broadcast_minute(6599)[:16], "2026-10-30T18:59")
+        self.assertEqual(forecast.from_broadcast_minute(3300)[:16], "2026-10-24T06:00")
+        self.assertEqual(forecast.from_broadcast_minute(4020)[:16], "2026-10-25T06:00")
+        self.assertEqual(forecast.from_broadcast_minute(4740)[:16], "2026-10-26T08:00")
+        self.assertEqual(forecast.from_broadcast_minute(8039)[:16], "2026-10-30T18:59")
+
+    def test_unobserved_songs_may_be_predicted_during_weekend(self):
+        state = {"tracks": [{"rank": 850, "title": "Saturday Song"},
+                            {"rank": 700, "title": "Sunday Song"}],
+                 "events": []}
+        forecast.update_forecasts(state, {}, [])
+        self.assertTrue(state["tracks"][0]["prediction"]["estimated_at"].startswith("2026-10-24"))
+        self.assertTrue(state["tracks"][1]["prediction"]["estimated_at"].startswith("2026-10-25"))
 
     def test_forecast_uses_anchors_and_marks_aired(self):
         rankmap = {1485: {"artist": "Radiohead", "title": "Creep"},
