@@ -1,58 +1,135 @@
 {
   "version": 2,
-  "last_checked": "2026-10-24T15:22:42.227974+02:00",
+  "last_checked": "2026-10-24T15:26:00.516160+02:00",
   "last_recording": "2026-10-24T15:22:25.535366+02:00",
   "last_error": null,
   "now_playing": {
-    "artist": "Wet Leg",
-    "title": "Catch These Fists",
-    "started_at": "2026-10-24T15:09:00+02:00"
+    "artist": "The Cure",
+    "title": "Close To Me",
+    "started_at": "2026-10-24T15:21:00+02:00"
   },
-  "status": "Audiofragmenten gemaakt; codeletter zelf controleren",
+  "status": "KINK gedraaid gecontroleerd; wacht op Metallica",
   "tracks": [
     {
       "rank": 1232,
-      "title": "Wherever I May Roam"
+      "title": "Wherever I May Roam",
+      "prediction": {
+        "status": "gedraaid",
+        "estimated_at": "2026-10-21T08:19:00+02:00",
+        "window_start": null,
+        "window_end": null,
+        "confidence": "bevestigde playlistwaarneming"
+      }
     },
     {
       "rank": 937,
-      "title": "Turn The Page"
+      "title": "Turn The Page",
+      "prediction": {
+        "status": "gedraaid",
+        "estimated_at": "2026-10-23T10:41:00+02:00",
+        "window_start": null,
+        "window_end": null,
+        "confidence": "bevestigde playlistwaarneming"
+      }
     },
     {
       "rank": 862,
-      "title": "Until it Sleeps"
+      "title": "Until it Sleeps",
+      "prediction": {
+        "status": "gedraaid",
+        "estimated_at": "2026-10-23T16:43:00+02:00",
+        "window_start": null,
+        "window_end": null,
+        "confidence": "bevestigde playlistwaarneming"
+      }
     },
     {
       "rank": 811,
-      "title": "The Memory Remains"
+      "title": "The Memory Remains",
+      "prediction": {
+        "status": "gedraaid",
+        "estimated_at": "2026-10-24T09:52:00+02:00",
+        "window_start": null,
+        "window_end": null,
+        "confidence": "bevestigde playlistwaarneming"
+      }
     },
     {
       "rank": 746,
-      "title": "Whiskey in the Jar"
+      "title": "Whiskey in the Jar",
+      "prediction": {
+        "status": "gedraaid",
+        "estimated_at": "2026-10-24T15:16:00+02:00",
+        "window_start": null,
+        "window_end": null,
+        "confidence": "bevestigde playlistwaarneming"
+      }
     },
     {
       "rank": 700,
-      "title": "The Unforgiven"
+      "title": "The Unforgiven",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-25T07:09+01:00",
+        "window_start": "2026-10-24T17:12+02:00",
+        "window_end": "2026-10-25T09:06+01:00",
+        "confidence": "op basis van uitzendtempo"
+      }
     },
     {
       "rank": 396,
-      "title": "Sad But True"
+      "title": "Sad But True",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-27T12:33+01:00",
+        "window_start": "2026-10-26T14:10+01:00",
+        "window_end": "2026-10-28T10:57+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 280,
-      "title": "Fade To Black"
+      "title": "Fade To Black",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-28T11:49+01:00",
+        "window_start": "2026-10-27T11:06+01:00",
+        "window_end": "2026-10-29T12:32+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 194,
-      "title": "Nothing Else Matters"
+      "title": "Nothing Else Matters",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-29T08:29+01:00",
+        "window_start": "2026-10-27T17:03+01:00",
+        "window_end": "2026-10-30T10:55+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 79,
-      "title": "Enter Sandman"
+      "title": "Enter Sandman",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-29T18:48+01:00",
+        "window_start": "2026-10-28T15:48+01:00",
+        "window_end": "2026-10-30T18:59+01:00",
+        "confidence": "ruwe indicatie"
+      }
     },
     {
       "rank": 34,
-      "title": "One"
+      "title": "One",
+      "prediction": {
+        "status": "verwacht",
+        "estimated_at": "2026-10-30T11:51+01:00",
+        "window_start": "2026-10-29T08:51+01:00",
+        "window_end": "2026-10-30T18:59+01:00",
+        "confidence": "ruwe indicatie"
+      }
     }
   ],
   "events": [
@@ -237,21 +314,6 @@
     }
   ],
   "forecast_anchors": [
-    {
-      "started_at": "2026-10-23T18:20:00+02:00",
-      "rank": 845,
-      "minute": 3260.0
-    },
-    {
-      "started_at": "2026-10-23T18:24:00+02:00",
-      "rank": 844,
-      "minute": 3264.0
-    },
-    {
-      "started_at": "2026-10-23T18:28:00+02:00",
-      "rank": 843,
-      "minute": 3268.0
-    },
     {
       "started_at": "2026-10-23T18:40:00+02:00",
       "rank": 841,
@@ -786,13 +848,28 @@
       "started_at": "2026-10-24T15:09:00+02:00",
       "rank": 748,
       "minute": 3849.0
+    },
+    {
+      "started_at": "2026-10-24T15:12:00+02:00",
+      "rank": 747,
+      "minute": 3852.0
+    },
+    {
+      "started_at": "2026-10-24T15:16:00+02:00",
+      "rank": 746,
+      "minute": 3856.0
+    },
+    {
+      "started_at": "2026-10-24T15:21:00+02:00",
+      "rank": 745,
+      "minute": 3861.0
     }
   ],
   "forecast_meta": {
     "observations": 108,
     "calibrated": true,
-    "pace_minutes_per_position": 5.06,
-    "last_observation": "2026-10-24T15:09:00+02:00",
+    "pace_minutes_per_position": 5.07,
+    "last_observation": "2026-10-24T15:21:00+02:00",
     "assumption": "Alle 12 dagen; ma-vr 08:00-19:00, za-zo 06:00-18:00; herhalingen uitgesloten"
   },
   "top10_unrevealed": [
