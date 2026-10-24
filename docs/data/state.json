@@ -1,135 +1,58 @@
 {
   "version": 2,
-  "last_checked": "2026-10-24T14:06:16.845932+02:00",
-  "last_recording": "2026-10-24T10:04:33.348584+02:00",
+  "last_checked": "2026-10-24T15:11:13.370597+02:00",
+  "last_recording": "2026-10-24T15:11:13.366824+02:00",
   "last_error": null,
   "now_playing": {
-    "artist": "The Haunted Youth",
-    "title": "forget me",
-    "started_at": "2026-10-24T14:05:00+02:00"
+    "artist": "Foo Fighters",
+    "title": "These Days",
+    "started_at": "2026-10-24T14:32:00+02:00"
   },
-  "status": "KINK gedraaid gecontroleerd; wacht op Metallica",
+  "status": "Luistervenster voltooid; geen nieuw fragment",
   "tracks": [
     {
       "rank": 1232,
-      "title": "Wherever I May Roam",
-      "prediction": {
-        "status": "gedraaid",
-        "estimated_at": "2026-10-21T08:19:00+02:00",
-        "window_start": null,
-        "window_end": null,
-        "confidence": "bevestigde playlistwaarneming"
-      }
+      "title": "Wherever I May Roam"
     },
     {
       "rank": 937,
-      "title": "Turn The Page",
-      "prediction": {
-        "status": "gedraaid",
-        "estimated_at": "2026-10-23T10:41:00+02:00",
-        "window_start": null,
-        "window_end": null,
-        "confidence": "bevestigde playlistwaarneming"
-      }
+      "title": "Turn The Page"
     },
     {
       "rank": 862,
-      "title": "Until it Sleeps",
-      "prediction": {
-        "status": "gedraaid",
-        "estimated_at": "2026-10-23T16:43:00+02:00",
-        "window_start": null,
-        "window_end": null,
-        "confidence": "bevestigde playlistwaarneming"
-      }
+      "title": "Until it Sleeps"
     },
     {
       "rank": 811,
-      "title": "The Memory Remains",
-      "prediction": {
-        "status": "gedraaid",
-        "estimated_at": "2026-10-24T09:52:00+02:00",
-        "window_start": null,
-        "window_end": null,
-        "confidence": "bevestigde playlistwaarneming"
-      }
+      "title": "The Memory Remains"
     },
     {
       "rank": 746,
-      "title": "Whiskey in the Jar",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-24T15:19+02:00",
-        "window_start": "2026-10-24T14:29+02:00",
-        "window_end": "2026-10-24T16:09+02:00",
-        "confidence": "op basis van actuele uitzending"
-      }
+      "title": "Whiskey in the Jar"
     },
     {
       "rank": 700,
-      "title": "The Unforgiven",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-25T07:09+01:00",
-        "window_start": "2026-10-24T17:02+02:00",
-        "window_end": "2026-10-25T09:16+01:00",
-        "confidence": "op basis van uitzendtempo"
-      }
+      "title": "The Unforgiven"
     },
     {
       "rank": 396,
-      "title": "Sad But True",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-27T12:17+01:00",
-        "window_start": "2026-10-26T13:34+01:00",
-        "window_end": "2026-10-28T11:00+01:00",
-        "confidence": "ruwe indicatie"
-      }
+      "title": "Sad But True"
     },
     {
       "rank": 280,
-      "title": "Fade To Black",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-28T11:27+01:00",
-        "window_start": "2026-10-27T10:25+01:00",
-        "window_end": "2026-10-29T12:30+01:00",
-        "confidence": "ruwe indicatie"
-      }
+      "title": "Fade To Black"
     },
     {
       "rank": 194,
-      "title": "Nothing Else Matters",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-29T08:04+01:00",
-        "window_start": "2026-10-27T16:19+01:00",
-        "window_end": "2026-10-30T10:50+01:00",
-        "confidence": "ruwe indicatie"
-      }
+      "title": "Nothing Else Matters"
     },
     {
       "rank": 79,
-      "title": "Enter Sandman",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-29T18:20+01:00",
-        "window_start": "2026-10-28T15:20+01:00",
-        "window_end": "2026-10-30T18:59+01:00",
-        "confidence": "ruwe indicatie"
-      }
+      "title": "Enter Sandman"
     },
     {
       "rank": 34,
-      "title": "One",
-      "prediction": {
-        "status": "verwacht",
-        "estimated_at": "2026-10-30T11:23+01:00",
-        "window_start": "2026-10-29T08:23+01:00",
-        "window_end": "2026-10-30T18:59+01:00",
-        "confidence": "ruwe indicatie"
-      }
+      "title": "One"
     }
   ],
   "events": [
@@ -287,26 +210,6 @@
     }
   ],
   "forecast_anchors": [
-    {
-      "started_at": "2026-10-23T16:54:00+02:00",
-      "rank": 860,
-      "minute": 3174.0
-    },
-    {
-      "started_at": "2026-10-23T16:57:00+02:00",
-      "rank": 859,
-      "minute": 3177.0
-    },
-    {
-      "started_at": "2026-10-23T17:08:00+02:00",
-      "rank": 858,
-      "minute": 3188.0
-    },
-    {
-      "started_at": "2026-10-23T17:11:00+02:00",
-      "rank": 857,
-      "minute": 3191.0
-    },
     {
       "started_at": "2026-10-23T17:18:00+02:00",
       "rank": 856,
@@ -836,13 +739,33 @@
       "started_at": "2026-10-24T14:05:00+02:00",
       "rank": 761,
       "minute": 3785.0
+    },
+    {
+      "started_at": "2026-10-24T14:13:00+02:00",
+      "rank": 759,
+      "minute": 3793.0
+    },
+    {
+      "started_at": "2026-10-24T14:17:00+02:00",
+      "rank": 758,
+      "minute": 3797.0
+    },
+    {
+      "started_at": "2026-10-24T14:21:00+02:00",
+      "rank": 757,
+      "minute": 3801.0
+    },
+    {
+      "started_at": "2026-10-24T14:32:00+02:00",
+      "rank": 756,
+      "minute": 3812.0
     }
   ],
   "forecast_meta": {
     "observations": 108,
     "calibrated": true,
-    "pace_minutes_per_position": 4.99,
-    "last_observation": "2026-10-24T14:05:00+02:00",
+    "pace_minutes_per_position": 5.01,
+    "last_observation": "2026-10-24T14:32:00+02:00",
     "assumption": "Alle 12 dagen; ma-vr 08:00-19:00, za-zo 06:00-18:00; herhalingen uitgesloten"
   },
   "top10_unrevealed": [
